@@ -1,0 +1,5 @@
+name: embedding_world
+dependencies:
+    - python=3.6.7
+    - pillow
+    - matplotlib

@@ -28,18 +28,17 @@ Usage
 ``embedding_world-v0``
 ----------------------
 
-Embedding world is simple N-dimension world for example the `Stanfrod GloVe<https://nlp.stanford.edu/projects/glove/>` or `facebook fastText models
- <https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md>`.
+Embedding world is simple N-dimension world for example the  or `Stanfrod GloVe
+<https://nlp.stanford.edu/projects/glove/>`_ `facebook fastText models <https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md>`_.
 There are `(2*N)+2` in each state {dimension(i)+1, dimension(i)-1} for every i in range from 1 to N and {pickup, dropdown}
 which deterministically cause the corresponding state transitions
 but actions that would take an agent of the grid leave a state unchanged.
 The reward is -1 for all tranistion until the goal is reached.
 The terminal state(goal) is represent in a vector/s.
 
-
 Please use this bibtex if you want to cite this repository in your publications:
 
-```
+``
 @misc{embedding_world,
   author = {Samir Moustafa},
   title = {Embedding Environment for OpenAI Gym},
@@ -48,4 +47,4 @@ Please use this bibtex if you want to cite this repository in your publications:
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
 }
-```
+``

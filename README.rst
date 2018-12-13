@@ -48,3 +48,14 @@ Please use this bibtex if you want to cite this repository in your publications:
           howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
           }
 ```
+
+```
+@misc{gym_minigrid,
+  author = {Chevalier-Boisvert, Maxime and Willems, Lucas},
+  title = {Minimalistic Gridworld Environment for OpenAI Gym},
+  year = {2018},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
+}
+```

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
+
 OpenAI gym Embedding world Demo
 ===============================
 
@@ -39,23 +41,13 @@ The terminal state(goal) is represent in a vector/s.
 Please use this bibtex if you want to cite this repository in your publications:
 
 ```
-    @misc{embedding_world,
-          author = {Samir Moustafa},
-          title = {Embedding Environment for OpenAI Gym},
-          year = {2019},
-          publisher = {GitHub},
-          journal = {GitHub repository},
-          howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
-          }
-```
-
-```
-@misc{gym_minigrid,
-  author = {Chevalier-Boisvert, Maxime and Willems, Lucas},
-  title = {Minimalistic Gridworld Environment for OpenAI Gym},
-  year = {2018},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
+@misc{embedding_world,
+    author = {Samir Moustafa},
+    title = {Embedding Environment for OpenAI Gym},
+    year = {2019},
+    publisher = {GitHub},
+    journal = {GitHub repository},
+    howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
 }
 ```
+

@@ -4,9 +4,8 @@ OpenAI gym Embedding world Demo
 [![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
 
 Implementation of N-dimension worlds environments for word embedding
-from book `Reinforcement Learning: An Introduction
-<http://incompleteideas.net/book/the-book-2nd.html>`_
-compatible with `OpenAI gym <https://github.com/openai/gym>`_.
+from book [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)
+compatible with [OpenAI gym](https://github.com/openai/gym>).
 
 install environment
 -------------------
@@ -30,8 +29,7 @@ Usage
 ``embedding_world-v0``
 ----------------------
 
-Embedding world is simple N-dimension world for example the `Stanfrod GloVe
-<https://nlp.stanford.edu/projects/glove/>`_ or `facebook fastText models <https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md>`_.
+Embedding world is simple N-dimension world for example the [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md).
 There are `(2*N)+2` in each state {dimension(i)+1, dimension(i)-1} for every i in range from 1 to N and {pickup, dropdown}
 which deterministically cause the corresponding state transitions
 but actions that would take an agent of the grid leave a state unchanged.

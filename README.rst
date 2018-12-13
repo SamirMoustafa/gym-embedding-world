@@ -1,5 +1,5 @@
-OpenAI gym Embedding world
-==========================
+OpenAI gym Embedding world Demo
+===============================
 
 Implementation of N-dimension worlds environments for word embedding
 from book `Reinforcement Learning: An Introduction

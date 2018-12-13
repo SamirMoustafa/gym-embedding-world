@@ -38,7 +38,7 @@ The terminal state(goal) is represent in a vector/s.
 
 Please use this bibtex if you want to cite this repository in your publications:
 
-.. code::
+```
     @misc{embedding_world,
           author = {Samir Moustafa},
           title = {Embedding Environment for OpenAI Gym},
@@ -47,3 +47,4 @@ Please use this bibtex if you want to cite this repository in your publications:
           journal = {GitHub repository},
           howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
           }
+```

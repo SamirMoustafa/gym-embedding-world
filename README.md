@@ -30,7 +30,10 @@ Usage
 ----------------------
 
 Embedding world is simple N-dimension world for example the [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md).
+
 There are `(2*N)+2` in each state {dimension(i)+1, dimension(i)-1} for every i in range from 1 to N and {pickup, dropdown}
+
+
 which deterministically cause the corresponding state transitions
 but actions that would take an agent of the grid leave a state unchanged.
 The reward is -1 for all tranistion until the goal is reached.

@@ -1,7 +1,8 @@
-[![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
 
 OpenAI gym Embedding world Demo
 ===============================
+[![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
+
 
 Implementation of N-dimension worlds environments for word embedding
 from book `Reinforcement Learning: An Introduction

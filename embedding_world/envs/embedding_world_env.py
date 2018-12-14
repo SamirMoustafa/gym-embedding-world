@@ -9,9 +9,8 @@ class EmbeddingEnv(gym.Env):
     def __init__(self):
         pass
 
-    def _step(self, action):
+    def step(self, action):
         """
-
         Parameters
         ----------
         action :
@@ -38,23 +37,30 @@ class EmbeddingEnv(gym.Env):
                  However, official evaluations of your agent are not allowed to
                  use this for learning.
         """
+        raise NotImplementedError
+
+    def seed(self):
         pass
 
-    def _reset(self):
+    def reset(self):
+        raise NotImplementedError
+
+    def render(self, mode='human', close=False):
+        raise NotImplementedError
+
+    def close(self):
         pass
 
-    def _render(self, mode='human', close=False):
-        pass
+'''
+    def take_action(self, action):
+        raise NotImplementedError
 
-    def _take_action(self, action):
-        pass
+    def get_reward(self):
+        raise NotImplementedError
 
-    def _get_reward(self):
-        pass
+    def get_seed(self):
+        raise NotImplementedError
 
-    def _get_seed(self):
-        pass
-
-    def _get_close(self):
-        pass
-
+    def get_close(self):
+        raise NotImplementedError
+'''

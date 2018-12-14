@@ -39,6 +39,10 @@ class EmbeddingEnv(gym.Env):
         """
         raise NotImplementedError
 
+    def set_word2vec(self,dir):
+        print(dir)
+        pass
+
     def seed(self, **kwargs):
         pass
 

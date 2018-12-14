@@ -1,1 +1,2 @@
 from embedding_world.envs.embedding_world_env import EmbeddingEnv
+from embedding_world.envs.embedding_world_env import EmbeddingEnvExample

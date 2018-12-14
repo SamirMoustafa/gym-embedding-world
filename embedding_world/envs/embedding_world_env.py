@@ -1,12 +1,47 @@
 import gym
+import os
+import numpy as np
 from gym import error, spaces, utils
 from gym.utils import seeding
 
+from gensim.models import KeyedVectors
 
 class EmbeddingEnv(gym.Env):
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self):
+    ACTION = ["N", "S", "E", "W"]
+
+    def __init__(self,embedding_file=None):
+
+        # load the corpus to gensim model as word to vector
+        word2vec = KeyedVectors.load_word2vec_format(embedding_file, binary=False)
+        # get the embedding dimension
+        self.emb_dim = word2vec.wv.vector_size
+
+
+        '''
+        if embedding_file:
+            self.embedding = MazeView2D(maze_name="OpenAI Gym - Maze (%s)" % maze_file,
+                                        maze_file_path=maze_file,
+                                        screen_size=(640, 640))
+        elif maze_size:
+            if mode == "plus":
+                has_loops = True
+                num_portals = int(round(min(maze_size) / 3))
+            else:
+                has_loops = False
+                num_portals = 0
+
+            self.maze_view = MazeView2D(maze_name="OpenAI Gym - Maze (%d x %d)" % maze_size,
+                                        maze_size=maze_size, screen_size=(640, 640),
+                                        has_loops=has_loops, num_portals=num_portals)
+        else:
+            raise AttributeError("One must supply either a maze_file path (str) or the maze_size (tuple of length 2)")
+
+        self.maze_size = self.maze_view.maze_size
+
+        #raise FileNotFoundError("Cannot find %s." % embedding_file)
+        '''
         pass
 
     def step(self, action):
@@ -39,18 +74,14 @@ class EmbeddingEnv(gym.Env):
         """
         raise NotImplementedError
 
-    def set_word2vec(self,dir):
-        print(dir)
-        pass
-
     def seed(self, **kwargs):
         pass
 
     def reset(self):
-        raise NotImplementedError
+        pass
 
     def render(self, mode='human', close=False):
-        raise NotImplementedError
+        pass
 
     def close(self):
         pass
@@ -68,3 +99,10 @@ class EmbeddingEnv(gym.Env):
     def get_close(self):
         raise NotImplementedError
 '''
+
+
+class EmbeddingEnvExample(EmbeddingEnv):
+
+    def __init__(self):
+        print(os.getcwd())
+        super(EmbeddingEnvExample, self).__init__(embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec")

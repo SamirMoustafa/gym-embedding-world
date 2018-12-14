@@ -3,11 +3,9 @@ OpenAI gym Embedding world Demo
 ===============================
 [![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
 
-Implementation of N-dimension worlds environments for word embedding
-from book [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)
-compatible with [OpenAI gym](https://github.com/openai/gym>).
+Implementation of N-dimension worlds environments for word embedding compatible with [OpenAI gym](https://github.com/openai/gym>).
 
-install environment
+Install environment
 -------------------
 
 .. code::
@@ -48,7 +46,7 @@ Please use this bibtex if you want to cite this repository in your publications:
     year = {2019},
     publisher = {GitHub},
     journal = {GitHub repository},
-    howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}},
+    howpublished = {\url{https://github.com/SamirMoustafa/embedding_world}}
 }
 ```
 

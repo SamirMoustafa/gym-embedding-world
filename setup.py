@@ -1,3 +1,5 @@
+#https://travis-ci.org/SamirMoustafa/embedding_world
+
 from setuptools import setup, find_packages
 
 setup(name='embedding_world',
@@ -8,4 +10,3 @@ setup(name='embedding_world',
       packages=find_packages(),
       install_requires=['gym','numpy']
 )
-

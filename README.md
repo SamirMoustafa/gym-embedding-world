@@ -8,16 +8,12 @@ Implementation of N-dimension worlds environments for word embedding compatible 
 Install environment on anaconda
 -------------------------------
 
-.. code::
-
     $ conda env create -f gym-embedding-world/environment.yml
     $ source embedding-world
     $ pip install -e gym-embedding-world/.
 
 Install environment on colab
 ----------------------------
-
-.. code::
 
     !git clone "https://github.com/SamirMoustafa/gym-embedding-world.git"
     !pip install -e gym-embedding-world/.

@@ -39,7 +39,7 @@ class EmbeddingEnv(gym.Env):
         """
         raise NotImplementedError
 
-    def seed(self):
+    def seed(self, **kwargs):
         pass
 
     def reset(self):

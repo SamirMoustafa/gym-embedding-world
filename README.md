@@ -24,8 +24,6 @@ Install environment on colab
 Usage
 -----
 
-.. code::
-
         $ python >>> import gym
         $ python >>> import embedding_world
         $ python >>> env = gym.make('embedding_world-v0')

@@ -1,9 +1,7 @@
 import os
-import random
-
-from gensim.models import KeyedVectors
 
 import numpy as np
+from gensim.models import KeyedVectors
 
 
 class SpaceHandler:
@@ -50,25 +48,23 @@ class SpaceHandler:
                 # raise ValueError("Goal can't be %s"%goal)
 
         self.COMPASS = {"dropout": tuple([1] * self.emb_dim),
-                        "pickup" : tuple([0] * self.emb_dim)}
+                        "pickup": tuple([0] * self.emb_dim)}
 
         temp_tuple = [0] * self.emb_dim
         for i in range(self.emb_dim):
-
             up, up[i] = temp_tuple, epslion
             self.COMPASS["dim(%s)+1" % i] = tuple(up)
 
-            down, down[i] = temp_tuple, -1*epslion
+            down, down[i] = temp_tuple, -1 * epslion
             self.COMPASS["dim(%s)-1" % i] = tuple(down)
 
             temp_tuple = [0] * self.emb_dim
 
-        #for i, val in enumerate(self.COMPASS):
+        # for i, val in enumerate(self.COMPASS):
         #    print(list(self.COMPASS.keys())[i], self.COMPASS.get(val))
 
         # Create the Robot
         self.__robot = self.entrance
-
 
     def update(self, mode="human"):
         try:
@@ -99,8 +95,8 @@ class SpaceHandler:
             if self.space.is_portal(self.robot):
                 self.__robot = np.array(self.space.get_portal(tuple(self.robot)).teleport(tuple(self.robot)))
 
-    def in_region(self,robot, dir):
-        for i in self.__robot+np.array(self.COMPASS[dir]):
+    def in_region(self, robot, dir):
+        for i in self.__robot + np.array(self.COMPASS[dir]):
             if (1 <= i or i <= -1): return False
 
     def reset_robot(self):

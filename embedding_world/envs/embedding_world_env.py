@@ -1,32 +1,36 @@
-import gym
 import os
+
+import gym
 import numpy as np
-from gym import error, spaces, utils
+from gym import spaces
 from gym.utils import seeding
 
 from embedding_world.envs.embedding_world_handler import SpaceHandler
 
+
 class EmbeddingEnv(gym.Env):
+    # TODO : Set the goal in this scope
+
     metadata = {'render.modes': ['human', "rgb_array"]}
 
     ACTION = []
 
-    def __init__(self,embedding_file=None, epsilon=None):
+    def __init__(self, embedding_file=None, epsilon=None):
 
         if embedding_file and epsilon:
             # load the corpus to gensim model as word to vector
-            self.space = SpaceHandler(space_file_path=embedding_file,epslion=0.0015)
+            self.space = SpaceHandler(space_file_path=embedding_file, epslion=0.0015)
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
 
             # define pickup and drop down actions
-            self.ACTION.append(["pickup","dropout"])
+            self.ACTION.append(["pickup", "dropout"])
             # make two action for every dimension example : up and down == dim(0)+1 dim(0)-1
             [self.ACTION.append(["dim(%s)+1" % dim, "dim(%s)-1" % dim]) for dim in range(self.emb_dim)]
             # flatten 2D list of action to 1D list : len len(ACTION) = 2N + 2
             self.ACTION = [j for sub in self.ACTION for j in sub]
             # store epsilon inverse as a space size
-            self.space_size = int(epsilon**(-1))
+            self.space_size = int(epsilon ** (-1))
 
             # define the n-dimension space size
             self.n_dim_space = tuple([self.space_size for i in range(self.emb_dim)])
@@ -41,7 +45,6 @@ class EmbeddingEnv(gym.Env):
                 low_i.append(np.zeros(len(self.n_dim_space), dtype=int))
                 high_i.append(np.array(self.n_dim_space, dtype=int) - np.ones(len(self.n_dim_space), dtype=int))
 
-
             self.observation_space = spaces.Box(np.array(low_i), np.array(high_i))
 
             # initial condition
@@ -53,10 +56,10 @@ class EmbeddingEnv(gym.Env):
             self.reset()
 
             # Just need to initialize the relevant attributes
-            #self._configure()
+            # self._configure()
 
-            print('space size is epsilon inverse %i'%self.space_size)
-            print('list of all actions %s'%self.ACTION)
+            print('space size is epsilon inverse %i' % self.space_size)
+            print('list of all actions %s' % self.ACTION)
             print(self.n_dim_space)
             print(self.action_space)
             print(self.observation_space)
@@ -77,7 +80,7 @@ class EmbeddingEnv(gym.Env):
         else:
             self.space.move_robot(action)
 
-        # TODO : Handle Goal in the handler class
+        # TODO : Handle goal in the handler class
         if np.array_equal(self.space.robot, self.space.goal):
             reward = 1
             done = True
@@ -93,7 +96,6 @@ class EmbeddingEnv(gym.Env):
 
         return self.state, reward, done, info
 
-
     def reset(self):
         pass
 
@@ -102,6 +104,7 @@ class EmbeddingEnv(gym.Env):
 
     def close(self):
         pass
+
 
 '''
     def take_action(self, action):
@@ -119,7 +122,7 @@ class EmbeddingEnv(gym.Env):
 
 
 class EmbeddingEnvExample(EmbeddingEnv):
-
     def __init__(self):
         print(os.getcwd())
-        super(EmbeddingEnvExample, self).__init__(embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec", epsilon=0.006)
+        super(EmbeddingEnvExample, self).__init__(
+            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec", epsilon=0.006)

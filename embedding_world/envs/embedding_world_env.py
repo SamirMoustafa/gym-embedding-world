@@ -39,8 +39,8 @@ class EmbeddingEnv(gym.Env):
             high_i = []
             # observation is the n-space
             for i in range(self.emb_dim):
-                low_i.append(np.zeros(len(self.n_dim_space), dtype=int))
-                high_i.append(np.array(self.n_dim_space, dtype=int) - np.ones(len(self.n_dim_space), dtype=int))
+                low_i.append(np.zeros(len(self.n_dim_space), dtype='float64'))
+                high_i.append(np.array(self.n_dim_space, dtype='float64') - np.ones(len(self.n_dim_space), dtype='float64'))
 
             self.observation_space = spaces.Box(np.array(low_i), np.array(high_i))
 
@@ -90,10 +90,11 @@ class EmbeddingEnv(gym.Env):
         print(self.space.robot[0])
         #print(self.goals_as_vetors[0])
 
+        print(self.space.robot)
+
         # check if the vector of robot is near to the target(desired) vector
         if (np.abs(self.space.robot - self.goals_as_vetors[0]) <= self.threshold).all():
             print("I found suitable vector")
-            print(self.space.robot)
             if len(self.goals_as_vetors) is 1:
 
                 # the phrase end

@@ -5,7 +5,6 @@ from gensim.models import KeyedVectors
 
 
 class SpaceHandler:
-
     COMPASS = {}
 
     def __init__(self, space_name="SpaceND", space_file_path=None, epslion=None, goal=None):
@@ -86,15 +85,14 @@ class SpaceHandler:
 
         if self.in_region(self.__robot, dir):
             # move the robot
-            self.__robot += np.array(self.COMPASS[dir],dtype='float64')
-
+            self.__robot += np.array(self.COMPASS[dir], dtype='float64')
 
     def in_region(self, robot, dir):
         for i in self.__robot + np.array(self.COMPASS[dir]):
             if (1 < i or i < -1): return False
         return True
 
-    def set_goals(self,words_list):
+    def set_goals(self, words_list):
         self.phrase_matrix = []
         for word in words_list:
             self.phrase_matrix.append(self.__space.wv[word])
@@ -127,26 +125,3 @@ class SpaceHandler:
     @property
     def game_over(self):
         return self.__task_is_over
-
-
-class Portal:
-    def __init__(self, *locations):
-
-        self.__locations = []
-        for location in locations:
-            if isinstance(location, (tuple, list)):
-                self.__locations.append(tuple(location))
-            else:
-                raise ValueError("location must be a list or a tuple.")
-
-    def teleport(self, cell):
-        if cell in self.locations:
-            return self.locations[(self.locations.index(cell) + 1) % len(self.locations)]
-        return cell
-
-    def get_index(self, cell):
-        return self.locations.index(cell)
-
-    @property
-    def locations(self):
-        return self.__locations

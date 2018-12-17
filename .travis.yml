@@ -8,10 +8,4 @@ env:
 install:
   - pip3 install -e .
 
-deploy:
-    provider: pypi
-    username: $TWINE_USERNAME
-    password: $TWINE_PASSWORD
-    on:
-        tags: true
-condition: $UBUNTU_VER = 16.04
+script: python run_test.py

@@ -13,8 +13,8 @@ class SpaceHandler:
         self.__goal = 0
 
         self.__task_is_over = False
-        #asdasdasd
-        # Load a maze
+
+        # Load a space
         if space_file_path is None:
             self.__space = KeyedVectors.load_word2vec_format(space_file_path, binary=False)
         else:

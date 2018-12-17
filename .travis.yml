@@ -1,9 +1,6 @@
-sudo: required
 language: python
 python:
   - "3.6-dev"  # 3.6 development branch
-env:
-  - UBUNTU_VER=18.10
 
 install:
   - pip3 install -e .

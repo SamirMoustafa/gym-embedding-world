@@ -9,13 +9,12 @@ from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 
 class EmbeddingEnv(gym.Env):
-    # TODO : Set the goal in this scope
 
     metadata = {'render.modes': ['human', "rgb_array"]}
-
+    threshold = 0.0001
     ACTION = []
 
-    def __init__(self, embedding_file=None, epsilon=None):
+    def __init__(self, embedding_file=None, epsilon=None, goals_as_words=None):
 
         if embedding_file and epsilon:
             # load the corpus to gensim model as word to vector
@@ -46,6 +45,11 @@ class EmbeddingEnv(gym.Env):
                 high_i.append(np.array(self.n_dim_space, dtype=int) - np.ones(len(self.n_dim_space), dtype=int))
 
             self.observation_space = spaces.Box(np.array(low_i), np.array(high_i))
+
+            # set goal
+            self.space.set_goals(['a','to'])
+            # get goal
+            self.goals_as_vetors = self.space.get_goals()
 
             # initial condition
             self.state = None
@@ -80,14 +84,22 @@ class EmbeddingEnv(gym.Env):
         else:
             self.space.move_robot(action)
 
-        # TODO : Handle goal in the handler class
-        if np.array_equal(self.space.robot, self.space.goal):
-            reward = 1
-            done = True
-        else:
+        # check if the vector of robot is near to the target(desired) vector
+        if np.abs(self.space.robot - self.goals_as_vetors[0]).all() <= self.threshold:
+            print("I found suitable vector")
+            if len(self.goals_as_vetors) is 1:
 
-            # TODO : Handle punishment
-            reward = -0.1 / (self.space_size[0] * self.space_size[1])
+                # the phrase end
+                reward = 1
+                done = True
+            else:
+                # match one word
+                self.goals_as_vetors.pop(0)
+                reward = .5
+                done = False
+        else:
+            print("I made a bad step.. I'm sorry")
+            reward = -0.1 / self.space_size
             done = False
 
         self.state = self.space.robot

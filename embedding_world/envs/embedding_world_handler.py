@@ -5,6 +5,7 @@ from gensim.models import KeyedVectors
 
 
 class SpaceHandler:
+
     COMPASS = {}
 
     def __init__(self, space_name="SpaceND", space_file_path=None, epslion=None, goal=None):
@@ -88,16 +89,21 @@ class SpaceHandler:
             raise ValueError("dir cannot be %s. The only valid dirs are %s." % (str(dir), str(self.COMPASS.keys())))
 
         if self.in_region(self.__robot, dir):
-
             # move the robot
-            self.__robot += np.array(self.COMPASS[dir])
-            # if it's in a portal afterward
-            if self.space.is_portal(self.robot):
-                self.__robot = np.array(self.space.get_portal(tuple(self.robot)).teleport(tuple(self.robot)))
+            self.__robot += np.array(self.COMPASS[dir],dtype='int64')
 
     def in_region(self, robot, dir):
         for i in self.__robot + np.array(self.COMPASS[dir]):
-            if (1 <= i or i <= -1): return False
+            if (1 < i or i < -1): return False
+        return True
+
+    def set_goals(self,words_list):
+        self.phrase_matrix = []
+        for word in words_list:
+            self.phrase_matrix.append(self.__space.wv[word])
+
+    def get_goals(self):
+        return self.phrase_matrix
 
     def reset_robot(self):
         self.__robot = np.zeros(self.emb_dim, dtype=int)

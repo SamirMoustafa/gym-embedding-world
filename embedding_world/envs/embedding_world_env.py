@@ -1,5 +1,3 @@
-import os
-
 import gym
 import numpy as np
 from gym import spaces
@@ -11,14 +9,17 @@ from embedding_world.envs.embedding_world_handler import SpaceHandler
 class EmbeddingEnv(gym.Env):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
-    threshold = 0.01
     ACTION = []
+    done = False
 
-    def __init__(self, embedding_file=None, epsilon=None, goals_as_words=None):
+    def __init__(self, embedding_file=None, epsilon=None):
 
         if embedding_file and epsilon:
+
+            self.epsilon = epsilon
+
             # load the corpus to gensim model as word to vector
-            self.space = SpaceHandler(space_file_path=embedding_file, epslion=0.0015)
+            self.space = SpaceHandler(space_file_path=embedding_file, epslion=0.001)
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
 
@@ -42,7 +43,7 @@ class EmbeddingEnv(gym.Env):
                 low_i.append(np.zeros(len(self.n_dim_space), dtype='float64'))
                 high_i.append(np.array(self.n_dim_space, dtype='float64') - np.ones(len(self.n_dim_space), dtype='float64'))
 
-            self.observation_space = spaces.Box(np.array(low_i), np.array(high_i))
+            self.observation_space = spaces.Box(np.array(low_i,), np.array(high_i), dtype='float64')
 
             # initial condition
             self.state = None
@@ -54,19 +55,13 @@ class EmbeddingEnv(gym.Env):
             '''
             # Just need to initialize the relevant attributes
             self._configure()
-
-            print('space size is epsilon inverse %i' % self.space_size)
-            print('list of all actions %s' % self.ACTION)
-            print(self.n_dim_space)
-            print(self.action_space)
-            print(self.observation_space)
             
             '''
         else:
             if epsilon is None:
-                raise AttributeError("must supply epsilon as float")
+                raise AttributeError("Must supply epsilon as float")
             if embedding_file is None:
-                raise AttributeError("must supply embedding_file path as (str)")
+                raise AttributeError("Must supply embedding_file path as (str)")
 
     def handle_goals(self,phrase):
         # set goals
@@ -80,69 +75,51 @@ class EmbeddingEnv(gym.Env):
         return [seed]
 
     def step(self, action):
-        print(self.space.robot[0])
-
         if isinstance(action, int):
             self.space.move_robot(self.ACTION[action])
         else:
             self.space.move_robot(action)
 
-        print(self.space.robot[0])
-        #print(self.goals_as_vetors[0])
-
-        print(self.space.robot)
-
+        # define difference between current position and target position
+        diff = np.abs(self.space.robot - self.goals_as_vetors[0])
         # check if the vector of robot is near to the target(desired) vector
-        if (np.abs(self.space.robot - self.goals_as_vetors[0]) <= self.threshold).all():
-            print("I found suitable vector")
+        if (diff <= self.epsilon).all():
             if len(self.goals_as_vetors) is 1:
-
                 # the phrase end
                 reward = 1
-                done = True
+                self.done = True
             else:
                 # match one word
                 self.goals_as_vetors.pop(0)
                 reward = .5
-                done = False
+                self.done = False
         else:
-            print("I made a bad step.. I'm sorry")
             reward = -0.1 / self.space_size
-            done = False
+            self.done = False
 
         self.state = self.space.robot
 
-        info = {}
+        info = {'euclidean distance':np.linalg.norm(diff)}
 
-        return self.state, reward, done, info
+        return self.state, reward, self.done, info
 
     def reset(self):
-        pass
+        self.space.reset_robot()
+        self.state = np.zeros(self.emb_dim)
+        self.steps_beyond_done = None
+        self.done = False
+        return self.state
 
     def render(self, mode='human', close=False):
         pass
 
     def close(self):
-        pass
-
-
-'''
-    def take_action(self, action):
-        raise NotImplementedError
-
-    def get_reward(self):
-        raise NotImplementedError
-
-    def get_seed(self):
-        raise NotImplementedError
-
-    def get_close(self):
-        raise NotImplementedError
-'''
+        del self.space
 
 
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):
-        print(os.getcwd())
         super(EmbeddingEnvExample, self).__init__(
-            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec", epsilon=0.006)
+            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec",
+            epsilon=0.006
+        )

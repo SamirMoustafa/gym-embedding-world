@@ -7,7 +7,9 @@ from gensim.models import KeyedVectors
 class SpaceHandler:
     COMPASS = {}
 
-    def __init__(self, space_name="SpaceND", space_file_path=None, epslion=None, goal=None):
+    def __init__(self, space_file_path=None, epslion=None):
+
+        print('Start loading the space from \'%s\', it might take several time.' % space_file_path)
 
         self.__goal = 0
 
@@ -31,34 +33,29 @@ class SpaceHandler:
         else:
             raise ValueError("Epsilon can't be %s" % epslion)
 
+        # define the embedding dimension
         self.emb_dim = self.__space.wv.vector_size
 
-        space_name = 'Space%iD' % self.emb_dim
+        #define the name for the space
+        space_name = 'Space-%iD' % self.emb_dim
 
         # Set the starting point
         self.__entrance = np.zeros(self.emb_dim, dtype='float64')
 
-        if goal:
-            if not (len(goal) == self.emb_dim):
-                raise ValueError("Goal dimension must match with the space")
-            else:
-                # Set the Goal
-                self.__goal = np.array(goal)
-                # else:
-                # raise ValueError("Goal can't be %s"%goal)
-
+        # define all available movement for the space
+        # initialize temp. with zeros (no movement)
         temp_tuple = [0] * self.emb_dim
         for i in range(self.emb_dim):
+            # define increasing motion in dimension(i)
             up, up[i] = temp_tuple, epslion
             self.COMPASS["dim(%s)+1" % i] = tuple(up)
-
+            # define decreasing motion in dimension(i)
             down, down[i] = temp_tuple, -1 * epslion
             self.COMPASS["dim(%s)-1" % i] = tuple(down)
-
+            # reinitialize temp. with zeros
             temp_tuple = [0] * self.emb_dim
 
-        # for i, val in enumerate(self.COMPASS):
-        #    print(list(self.COMPASS.keys())[i], self.COMPASS.get(val))
+        print('Finish loading %s with epsilon equals %f' % (space_name, epslion))
 
         # Create the Robot
         self.__robot = self.entrance
@@ -83,11 +80,11 @@ class SpaceHandler:
         if dir not in self.COMPASS.keys():
             raise ValueError("dir cannot be %s. The only valid dirs are %s." % (str(dir), str(self.COMPASS.keys())))
 
-        if self.in_region(self.__robot, dir):
+        if self.in_region(dir):
             # move the robot
             self.__robot += np.array(self.COMPASS[dir], dtype='float64')
 
-    def in_region(self, robot, dir):
+    def in_region(self, dir):
         for i in self.__robot + np.array(self.COMPASS[dir]):
             if (1 < i or i < -1): return False
         return True
@@ -101,7 +98,7 @@ class SpaceHandler:
         return self.phrase_matrix
 
     def reset_robot(self):
-        self.__robot = np.zeros(self.emb_dim, dtype=int)
+        self.__robot = np.zeros(self.emb_dim, dtype='float64')
 
     def __controller_update(self):
         pass

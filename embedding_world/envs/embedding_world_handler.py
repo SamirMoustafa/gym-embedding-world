@@ -5,6 +5,7 @@ from gensim.models import KeyedVectors
 
 
 class SpaceHandler:
+
     COMPASS = {}
 
     def __init__(self, space_file_path=None, epslion=None):
@@ -30,10 +31,10 @@ class SpaceHandler:
             self.__space = KeyedVectors.load_word2vec_format(space_file_path, binary=False)
 
         # Load epsilon value
-        if epslion:
-            self.space_size = int(epslion ** (-1))
-        else:
+        if epslion is None or epslion >= 1:
             raise ValueError("Epsilon can't be %s" % epslion)
+        else:
+            self.space_size = int(epslion ** (-1))
 
         # define the embedding dimension
         self.emb_dim = self.__space.wv.vector_size
@@ -57,20 +58,11 @@ class SpaceHandler:
             # reinitialize temp. with zeros
             temp_tuple = [0] * self.emb_dim
 
-        print('Finish loading %s with epsilon equals %f' % (space_name, epslion))
-
         # create the moving robot
         self.__robot = self.entrance
 
-    def update(self, mode="human"):
-        try:
-            self.__controller_update()
-        except Exception as e:
-            self.__task_is_over = True
-            self.stop()
-            raise e
-        else:
-            return
+        # print message to make awareness that loading word2vec model finished
+        print('Finish loading %s with epsilon equals %f' % (space_name, epslion))
 
     def stop(self):
         try:
@@ -102,9 +94,6 @@ class SpaceHandler:
     def reset_robot(self):
         self.__robot = np.zeros(self.emb_dim, dtype='float64')
 
-    def __controller_update(self):
-        pass
-
     @property
     def space(self):
         return self.__space
@@ -122,5 +111,5 @@ class SpaceHandler:
         return self.__goal
 
     @property
-    def game_over(self):
+    def stop(self):
         return self.__task_is_over

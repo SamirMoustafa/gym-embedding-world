@@ -19,7 +19,7 @@ class EmbeddingEnv(gym.Env):
             self.epsilon = epsilon
 
             # load the corpus to gensim model as word to vector
-            self.space = SpaceHandler(space_file_path=embedding_file, epslion=0.001)
+            self.space = SpaceHandler(space_file_path=embedding_file, epslion=epsilon)
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
 
@@ -99,7 +99,7 @@ class EmbeddingEnv(gym.Env):
 
         self.state = self.space.robot
 
-        info = {'euclidean distance':np.linalg.norm(diff)}
+        info = {'euclidean-distance':np.linalg.norm(diff)}
 
         return self.state, reward, self.done, info
 
@@ -121,5 +121,5 @@ class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):
         super(EmbeddingEnvExample, self).__init__(
             embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec",
-            epsilon=0.006
+            epsilon=0.001
         )

@@ -8,4 +8,4 @@ env:
 install:
   - pip3 install -e .
 
-script: python run_test.py
+script: ./run_test.py

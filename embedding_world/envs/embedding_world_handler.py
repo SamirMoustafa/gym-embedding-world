@@ -9,10 +9,11 @@ class SpaceHandler:
 
     def __init__(self, space_file_path=None, epslion=None):
 
+        # print message to make awareness that it might take some time
         print('Start loading the space from \'%s\', it might take several time.' % space_file_path)
 
+        # initialize goal and task finish or not
         self.__goal = 0
-
         self.__task_is_over = False
 
         # Load a space
@@ -28,6 +29,7 @@ class SpaceHandler:
                     raise FileExistsError("Cannot find %s." % space_file_path)
             self.__space = KeyedVectors.load_word2vec_format(space_file_path, binary=False)
 
+        # Load epsilon value
         if epslion:
             self.space_size = int(epslion ** (-1))
         else:
@@ -36,10 +38,10 @@ class SpaceHandler:
         # define the embedding dimension
         self.emb_dim = self.__space.wv.vector_size
 
-        #define the name for the space
+        # define the name for the space
         space_name = 'Space-%iD' % self.emb_dim
 
-        # Set the starting point
+        # set the starting point
         self.__entrance = np.zeros(self.emb_dim, dtype='float64')
 
         # define all available movement for the space
@@ -57,7 +59,7 @@ class SpaceHandler:
 
         print('Finish loading %s with epsilon equals %f' % (space_name, epslion))
 
-        # Create the Robot
+        # create the moving robot
         self.__robot = self.entrance
 
     def update(self, mode="human"):

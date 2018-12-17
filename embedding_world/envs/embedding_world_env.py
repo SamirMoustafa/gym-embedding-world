@@ -11,7 +11,7 @@ from embedding_world.envs.embedding_world_handler import SpaceHandler
 class EmbeddingEnv(gym.Env):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
-    threshold = 0.0001
+    threshold = 0.01
     ACTION = []
 
     def __init__(self, embedding_file=None, epsilon=None, goals_as_words=None):
@@ -22,8 +22,6 @@ class EmbeddingEnv(gym.Env):
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
 
-            # define pickup and drop down actions
-            self.ACTION.append(["pickup", "dropout"])
             # make two action for every dimension example : up and down == dim(0)+1 dim(0)-1
             [self.ACTION.append(["dim(%s)+1" % dim, "dim(%s)-1" % dim]) for dim in range(self.emb_dim)]
             # flatten 2D list of action to 1D list : len len(ACTION) = 2N + 2
@@ -35,7 +33,7 @@ class EmbeddingEnv(gym.Env):
             self.n_dim_space = tuple([self.space_size for i in range(self.emb_dim)])
 
             # forward or backward in each dimension
-            self.action_space = spaces.Discrete(2 * len(self.n_dim_space) + 2)
+            self.action_space = spaces.Discrete(2 * len(self.n_dim_space))
 
             low_i = []
             high_i = []
@@ -46,11 +44,6 @@ class EmbeddingEnv(gym.Env):
 
             self.observation_space = spaces.Box(np.array(low_i), np.array(high_i))
 
-            # set goal
-            self.space.set_goals(['a','to'])
-            # get goal
-            self.goals_as_vetors = self.space.get_goals()
-
             # initial condition
             self.state = None
             self.steps_beyond_done = None
@@ -58,35 +51,49 @@ class EmbeddingEnv(gym.Env):
             # Simulation related variables.
             self.seed()
             self.reset()
-
+            '''
             # Just need to initialize the relevant attributes
-            # self._configure()
+            self._configure()
 
             print('space size is epsilon inverse %i' % self.space_size)
             print('list of all actions %s' % self.ACTION)
             print(self.n_dim_space)
             print(self.action_space)
             print(self.observation_space)
-
+            
+            '''
         else:
             if epsilon is None:
                 raise AttributeError("must supply epsilon as float")
             if embedding_file is None:
                 raise AttributeError("must supply embedding_file path as (str)")
 
+    def handle_goals(self,phrase):
+        # set goals
+        self.space.set_goals(phrase.split())
+        # get goal
+        self.goals_as_vetors = self.space.get_goals()
+
+
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
     def step(self, action):
+        print(self.space.robot[0])
+
         if isinstance(action, int):
             self.space.move_robot(self.ACTION[action])
         else:
             self.space.move_robot(action)
 
+        print(self.space.robot[0])
+        #print(self.goals_as_vetors[0])
+
         # check if the vector of robot is near to the target(desired) vector
-        if np.abs(self.space.robot - self.goals_as_vetors[0]).all() <= self.threshold:
+        if (np.abs(self.space.robot - self.goals_as_vetors[0]) <= self.threshold).all():
             print("I found suitable vector")
+            print(self.space.robot)
             if len(self.goals_as_vetors) is 1:
 
                 # the phrase end

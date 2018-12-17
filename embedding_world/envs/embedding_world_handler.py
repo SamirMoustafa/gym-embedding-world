@@ -37,7 +37,7 @@ class SpaceHandler:
         space_name = 'Space%iD' % self.emb_dim
 
         # Set the starting point
-        self.__entrance = np.zeros(self.emb_dim, dtype=int)
+        self.__entrance = np.zeros(self.emb_dim, dtype='float64')
 
         if goal:
             if not (len(goal) == self.emb_dim):
@@ -47,9 +47,6 @@ class SpaceHandler:
                 self.__goal = np.array(goal)
                 # else:
                 # raise ValueError("Goal can't be %s"%goal)
-
-        self.COMPASS = {"dropout": tuple([1] * self.emb_dim),
-                        "pickup": tuple([0] * self.emb_dim)}
 
         temp_tuple = [0] * self.emb_dim
         for i in range(self.emb_dim):
@@ -84,13 +81,13 @@ class SpaceHandler:
             pass
 
     def move_robot(self, dir):
-
         if dir not in self.COMPASS.keys():
             raise ValueError("dir cannot be %s. The only valid dirs are %s." % (str(dir), str(self.COMPASS.keys())))
 
         if self.in_region(self.__robot, dir):
             # move the robot
-            self.__robot += np.array(self.COMPASS[dir],dtype='int64')
+            self.__robot += np.array(self.COMPASS[dir],dtype='float64')
+
 
     def in_region(self, robot, dir):
         for i in self.__robot + np.array(self.COMPASS[dir]):

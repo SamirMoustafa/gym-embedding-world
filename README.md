@@ -27,6 +27,8 @@ Usage
         $ python >>> import gym
         $ python >>> import embedding_world
         $ python >>> env = gym.make('embedding_world-v0')
+        $ python >>> env.handle_goals("this is phrase example")
+        $ python >>> state, reward, done, info = env.step('dim(0)+1')
 
 ``embedding_world-v0``
 ----------------------

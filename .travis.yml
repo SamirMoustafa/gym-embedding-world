@@ -1,15 +1,12 @@
 sudo: required
 language: python
-services:
-  - docker
+python:
+  - "3.6-dev"  # 3.6 development branch
 env:
-  - UBUNTU_VER=16.04
-  - UBUNTU_VER=18.04
+  - UBUNTU_VER=18.10
 
-install: "requirements.txt"
-script:
-  - docker build -f test.dockerfile.${UBUNTU_VER} -t gym-test --build-arg MUJOCO_KEY=$MUJOCO_KEY .
-  - docker run -e MUJOCO_KEY=$MUJOCO_KEY gym-test tox
+install:
+  - pip3 install -e .
 
 deploy:
     provider: pypi

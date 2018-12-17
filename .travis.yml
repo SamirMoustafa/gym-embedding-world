@@ -5,4 +5,4 @@ python:
 install:
   - pip3 install -e .
 
-script: ./run_test.py
+script: python run_test.py

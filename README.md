@@ -1,7 +1,7 @@
 
 OpenAI gym Embedding world Demo
 ===============================
-[![Build Status](https://travis-ci.org/SamirMoustafa/embedding_world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
+[![Build Status](https://travis-ci.org/SamirMoustafa/gym-embedding-world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/embedding_world)
 
 Implementation of N-dimension worlds environments for word embedding compatible with [OpenAI gym](https://github.com/openai/gym>).
 

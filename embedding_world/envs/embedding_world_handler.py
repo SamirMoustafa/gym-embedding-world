@@ -79,8 +79,10 @@ class SpaceHandler:
             self.__robot += np.array(self.COMPASS[dir], dtype='float64')
 
     def in_region(self, dir):
-        for i in self.__robot + np.array(self.COMPASS[dir]):
-            if (1 < i or i < -1): return False
+        # define the future step that the robot wants to move to it
+        future_step = self.__robot + np.array(self.COMPASS[dir])
+        # check that future step in between 1 and -1
+        if (1 < future_step).any() or (future_step < -1).any(): return False
         return True
 
     def set_goals(self, words_list):

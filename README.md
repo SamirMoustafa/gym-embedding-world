@@ -67,5 +67,5 @@ Please use this bibtex if you want to cite this repository in your publications:
     howpublished = {\url{https://github.com/SamirMoustafa/gym-embedding-world}}
 }
 ```
-This environment has been built as part of  graduation project done at the [University of Alexandria, Department of Computer Science](http://sci.alexu.edu.eg/index.php/en/)
+This environment has been built as part of graduation project at [University of Alexandria, Department of Computer Science](http://sci.alexu.edu.eg/index.php/en/)
 

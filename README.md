@@ -1,6 +1,11 @@
 
 OpenAI gym Embedding world Demo
 ===============================
+
+<div align="center">
+  <img src="https://google.github.io/dopamine/images/dopamine_logo.png"><br><br>
+</div>
+
 [![Build Status](https://travis-ci.org/SamirMoustafa/gym-embedding-world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/gym-embedding-world)
 
 Implementation of N-dimension world environments for word embedding compatible with [OpenAI gym](https://github.com/openai/gym>).

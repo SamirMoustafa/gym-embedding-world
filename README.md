@@ -3,7 +3,7 @@ OpenAI gym Embedding world Demo
 ===============================
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/SamirMoustafa/gym-embedding-world/master/assets/9-dimensional-hypercube.gif"><br><br>
+  <img width="80%" src="https://raw.githubusercontent.com/SamirMoustafa/gym-embedding-world/master/assets/9-dimensional-hypercube.gif"><br><br>
   <h6>An eight-dimensional hypercube graph.</h6>
 </div>
 

@@ -11,6 +11,12 @@ OpenAI gym Embedding world Demo
 
 Implementation of N-dimension world environments for word embedding compatible with [OpenAI gym](https://github.com/openai/gym>).
 
+Requirements:
+- Python 3.5+
+- OpenAI Gym
+- NumPy
+- Gensim
+
 Install environment on anaconda
 -------------------------------
 

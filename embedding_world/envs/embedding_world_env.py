@@ -8,8 +8,6 @@ from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 class EmbeddingEnv(gym.Env):
 
-    env = None
-
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = []
     done = False
@@ -118,6 +116,9 @@ class EmbeddingEnv(gym.Env):
     def close(self):
         del self.space
 
+    @property
+    def env(self):
+        return self
 
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):

@@ -18,6 +18,8 @@ class EmbeddingEnv(gym.Env):
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
 
+
+
         if embedding_file and epsilon:
 
             self.epsilon = epsilon
@@ -67,10 +69,11 @@ class EmbeddingEnv(gym.Env):
             if embedding_file is None:
                 raise AttributeError("Must supply embedding_file path as (str)")
 
+        self.handle_goals()
 
 
 
-    def handle_goals(self,phrase=['green']):
+    def handle_goals(self,phrase='green'):
         # set goals
         self.space.set_goals(phrase.split())
         # get goal

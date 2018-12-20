@@ -135,6 +135,6 @@ class EmbeddingEnv(gym.Env):
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):
         super(EmbeddingEnvExample, self).__init__(
-            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.en.vec",
+            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.75.en.vec",
             epsilon=0.001
         )

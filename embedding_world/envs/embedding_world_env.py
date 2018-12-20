@@ -8,6 +8,8 @@ from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 class EmbeddingEnv(gym.Env):
 
+    env = None
+
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = []
     done = False

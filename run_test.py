@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     env.reset()
 
-    state, reward, done, info = env.step('dim(0)+1')
+    state, reward, done, info = env.step('528')
 
     print(state, reward, done, info)
 

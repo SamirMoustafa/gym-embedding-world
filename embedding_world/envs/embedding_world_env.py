@@ -90,7 +90,10 @@ class EmbeddingEnv(gym.Env):
         if isinstance(action, int):
             self.space.move_robot(self.ACTION[action])
         else:
-            self.space.move_robot(action)
+            if action.isdigit():
+                self.space.move_robot(self.ACTION[int(action)])
+            else:
+                self.space.move_robot(action)
 
         # define difference between current position and target position
         diff = np.abs(self.space.robot - self.goals_as_vetors[0])

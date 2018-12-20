@@ -2,6 +2,7 @@ import gym
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
+import atari_py
 
 from embedding_world.envs.embedding_world_handler import SpaceHandler
 
@@ -13,6 +14,9 @@ class EmbeddingEnv(gym.Env):
     done = False
 
     def __init__(self, embedding_file=None, epsilon=None):
+
+        self.ale = atari_py.ALEInterface()
+        self.game_path = atari_py.get_game_path('pong')
 
         if embedding_file and epsilon:
 
@@ -63,6 +67,9 @@ class EmbeddingEnv(gym.Env):
             if embedding_file is None:
                 raise AttributeError("Must supply embedding_file path as (str)")
 
+
+
+
     def handle_goals(self,phrase):
         # set goals
         self.space.set_goals(phrase.split())
@@ -72,6 +79,8 @@ class EmbeddingEnv(gym.Env):
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
+
+        self.ale.loadROM(self.game_path)
         return [seed]
 
     def step(self, action):
@@ -99,7 +108,7 @@ class EmbeddingEnv(gym.Env):
 
         self.state = self.space.robot
 
-        info = {'euclidean-distance':np.linalg.norm(diff)}
+        info = {"ale.lives": self.ale.lives()}
 
         return self.state, reward, self.done, info
 

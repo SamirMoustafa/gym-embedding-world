@@ -87,13 +87,10 @@ class EmbeddingEnv(gym.Env):
         return [seed]
 
     def step(self, action):
-        if isinstance(action, int):
-            self.space.move_robot(self.ACTION[action])
+        if isinstance(action, int) or isinstance(action, (np.ndarray, np.generic) ) :
+            self.space.move_robot(self.ACTION[int(action)])
         else:
-            if action.isdigit():
-                self.space.move_robot(self.ACTION[int(action)])
-            else:
-                self.space.move_robot(action)
+            self.space.move_robot(action)
 
         # define difference between current position and target position
         diff = np.abs(self.space.robot - self.goals_as_vetors[0])

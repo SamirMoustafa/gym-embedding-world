@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     env.reset()
 
-    state, reward, done, info = env.step('528')
+    state, reward, done, info = env.step(np.array([20],dtype='int64'))
 
     print(state, reward, done, info)
 

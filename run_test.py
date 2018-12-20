@@ -4,7 +4,7 @@ import embedding_world
 
 if __name__ == '__main__':
 
-    env = gym.make('embedding_world-v0')
+    env = gym.make('embedding_worldNoFrameskip-v0')
 
     env.reset()
 

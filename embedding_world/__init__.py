@@ -6,6 +6,6 @@ register(
 )
 
 register(
-    id='embedding_world-NoFrameskip-v0',
+    id='embedding_worldNoFrameskip-v0',
     entry_point='embedding_world.envs:EmbeddingEnvExample',
 )

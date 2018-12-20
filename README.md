@@ -11,6 +11,12 @@ OpenAI gym Embedding world
 
 Implementation of N-dimension world environments for word embedding compatible with [OpenAI gym](https://github.com/openai/gym>).
 
+Requirements:
+- Python 3.5+
+- OpenAI Gym
+- NumPy
+- Gensim
+
 Install environment on anaconda
 -------------------------------
 
@@ -61,4 +67,5 @@ Please use this bibtex if you want to cite this repository in your publications:
     howpublished = {\url{https://github.com/SamirMoustafa/gym-embedding-world}}
 }
 ```
+This environment has been built as part of graduation project at [University of Alexandria, Department of Computer Science](http://sci.alexu.edu.eg/index.php/en/)
 

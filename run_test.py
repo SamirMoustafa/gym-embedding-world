@@ -1,9 +1,12 @@
 import gym
+import numpy as np
 import embedding_world
 
 if __name__ == '__main__':
 
     env = gym.make('embedding_world-v0')
+
+    env.reset()
 
     env.handle_goals("a")
 

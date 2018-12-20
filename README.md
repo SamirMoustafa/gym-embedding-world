@@ -1,6 +1,6 @@
 
-OpenAI gym Embedding world Demo
-===============================
+OpenAI gym Embedding world
+==========================
 
 <div align="center">
   <img width="40%" src="https://raw.githubusercontent.com/SamirMoustafa/gym-embedding-world/master/assets/9-dimensional-hypercube.gif"><br><br>

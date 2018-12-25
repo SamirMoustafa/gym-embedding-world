@@ -1,6 +1,10 @@
 import gym
+import os
 import numpy as np
+import pandas as pd
 import embedding_world
+from gensim.models import KeyedVectors
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
@@ -8,7 +12,7 @@ if __name__ == '__main__':
 
     env.reset()
 
-    state, reward, done, info = env.step(np.array([2*2-1],dtype='int64'))
+    state, reward, done, info = env.step(np.array([1],dtype='int64'))
 
     print(state, reward, done, info)
 

@@ -15,10 +15,9 @@ class EmbeddingEnv(gym.Env):
 
     def __init__(self, embedding_file=None, epsilon=None):
 
+        # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
-
-
 
         if embedding_file and epsilon:
 
@@ -73,9 +72,9 @@ class EmbeddingEnv(gym.Env):
 
 
 
-    def handle_goals(self,phrase='green'):
+    def handle_goals(self,phrase='We love you'):
         # set goals
-        self.space.set_goals(phrase.split())
+        self.space.set_goals(phrase.lower().split())
         # get goal
         self.goals_as_vetors = self.space.get_goals()
 

@@ -7,5 +7,5 @@ setup(name='gym-embedding_world',
       author_email='samir.moustafa.97@gmail.com',
       author='Samir Moustafa',
       packages=find_packages(),
-      install_requires=['gym', 'numpy', 'gensim','atari-py','pandas']
+      install_requires=['gym', 'numpy', 'gensim','atari-py','pandas','matplotlib']
       )

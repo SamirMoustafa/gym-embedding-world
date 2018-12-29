@@ -72,7 +72,7 @@ class EmbeddingEnv(gym.Env):
 
 
 
-    def handle_goals(self,phrase='We love you'):
+    def handle_goals(self,phrase='dog'):
         # set goals
         self.space.set_goals(phrase.lower().split())
         # get goal

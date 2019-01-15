@@ -1,10 +1,7 @@
 import gym
-import os
 import numpy as np
-import pandas as pd
 import embedding_world
-from gensim.models import KeyedVectors
-import matplotlib.pyplot as plt
+
 
 if __name__ == '__main__':
 

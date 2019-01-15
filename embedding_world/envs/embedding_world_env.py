@@ -1,4 +1,5 @@
 import gym
+import re
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
@@ -13,18 +14,32 @@ class EmbeddingEnv(gym.Env):
     ACTION = []
     done = False
 
-    def __init__(self, embedding_file=None, epsilon=None):
+    def __init__(self, embedding_from_file=None, embedding_to_file=None, epsilon=None):
 
         # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
 
-        if embedding_file and epsilon:
+        if embedding_from_file and embedding_to_file and epsilon:
 
             self.epsilon = epsilon
 
+            phrase, target = 'accept', 'قبول'
+
             # load the corpus to gensim model as word to vector
-            self.space = SpaceHandler(space_file_path=embedding_file, epslion=epsilon)
+            self.space = SpaceHandler(space_file_path_from=embedding_from_file,
+                                      space_file_path_to=embedding_to_file,
+                                      initial_words_list = phrase.lower().split(),
+                                      goal_words_list=self.normalizeArabic(target).split(),
+                                      epslion=epsilon)
+
+            # get goal
+            self.goals_as_vetors = self.space.get_goals()
+
+            # get initial
+            self.initial_as_vetors = self.space.get_initial()
+
+
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
 
@@ -65,24 +80,14 @@ class EmbeddingEnv(gym.Env):
         else:
             if epsilon is None:
                 raise AttributeError("Must supply epsilon as float")
-            if embedding_file is None:
-                raise AttributeError("Must supply embedding_file path as (str)")
-
-        self.handle_goals()
-
-
-
-    def handle_goals(self,phrase='we really enjoy'):
-        # set goals
-        self.space.set_goals(phrase.lower().split())
-        # get goal
-        self.goals_as_vetors = self.space.get_goals()
-
+            if embedding_from_file is None:
+                raise AttributeError("Must supply embedding_from_file path as (str)")
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
         self.ale.loadROM(self.game_path)
+
         return [seed]
 
     def step(self, action):
@@ -116,7 +121,7 @@ class EmbeddingEnv(gym.Env):
 
     def reset(self):
         self.space.reset_robot()
-        self.state = np.zeros(self.emb_dim)
+        self.state = np.array(self.initial_as_vetors)
         self.steps_beyond_done = None
         self.done = False
         return self.state
@@ -127,6 +132,10 @@ class EmbeddingEnv(gym.Env):
     def close(self):
         del self.space
 
+    def normalizeArabic(self,text):
+        text = re.sub("[إأٱآا]", "ا", text)
+        return (text)
+
     @property
     def env(self):
         return self
@@ -134,6 +143,7 @@ class EmbeddingEnv(gym.Env):
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):
         super(EmbeddingEnvExample, self).__init__(
-            embedding_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
+            embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
+            embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec",
             epsilon=0.001
         )

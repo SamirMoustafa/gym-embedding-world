@@ -16,7 +16,7 @@ class EmbeddingEnv(gym.Env):
 
     phrase, target = None, None
     metadata = {'render.modes': ['human', "rgb_array"]}
-    ACTION = []
+    ACTION = [['pick-up']]
     done = False
 
     def __init__(self, embedding_from_file=None, embedding_to_file=None):
@@ -35,7 +35,7 @@ class EmbeddingEnv(gym.Env):
 
     def __set_paths__(self,embedding_from_file=None,embedding_to_file=None):
 
-        if self.phrase == None or self.target == None:
+        if self.phrase is None or self.target == None:
             raise ValueError("use __set_sentnce__(phrase, target) to set your sentences")
 
         # load the corpus to gensim model as word to vector
@@ -58,7 +58,7 @@ class EmbeddingEnv(gym.Env):
 
         # make two action for every dimension example : up and down == dim(0)+1 dim(0)-1
         [self.ACTION.append(["dim(%s)+1" % dim, "dim(%s)-1" % dim]) for dim in range(self.emb_dim)]
-        # flatten 2D list of action to 1D list : len len(ACTION) = 2N + 2
+        # flatten 2D list of action to 1D list : len len(ACTION) = 2N + 1
         self.ACTION = [j for sub in self.ACTION for j in sub]
         # store epsilon inverse as a space size
         self.space_size = int(self.epsilon ** (-1))
@@ -67,7 +67,7 @@ class EmbeddingEnv(gym.Env):
         self.n_dim_space = tuple([self.space_size for i in range(self.emb_dim)])
 
         # forward or backward in each dimension
-        self.action_space = spaces.Discrete(2 * len(self.n_dim_space))
+        self.action_space = spaces.Discrete(2 * len(self.n_dim_space) + 1)
 
         low_i = []
         high_i = []
@@ -76,7 +76,7 @@ class EmbeddingEnv(gym.Env):
             low_i.append(np.zeros(len(self.n_dim_space), dtype='float64'))
             high_i.append(np.array(self.n_dim_space, dtype='float64') - np.ones(len(self.n_dim_space), dtype='float64'))
 
-        self.observation_space = spaces.Box(np.array(low_i, ), np.array(high_i), dtype='float64')
+        self.observation_space = spaces.Box(np.array(low_i), np.array(high_i), dtype='float64')
 
         # initial condition
         self.state = None
@@ -105,24 +105,21 @@ class EmbeddingEnv(gym.Env):
         # define difference between current position and current goal position
         difference = np.abs(self.space.current_pos - self.get_current_goal)
 
-        if (difference <= self.epsilon).all():
+        if (difference <= self.epsilon).all() and sum(action) == 0:
             if self.number_of_remain_words == 1:
                 # the phrase end
                 reward = 1
                 self.done = True
                 self.__remove_first_vector_from_goal()
-                return self.space.current_pos, reward, self.done, info
             else:
                 reward = .5
+                self.space.remove_first_vector()
+                self.__remove_first_vector_from_goal()
                 self.done = False
-
-            self.space.remove_first_vector()
-            self.__remove_first_vector_from_goal()
-
-            self.__move_robot(action)
+            return self.space.current_pos.tolist(), reward, self.done, info
 
         else:
-            reward = -self.emb_dim * np.sqrt(np.sum(difference**2))
+            reward = -round(self.emb_dim * np.sqrt(np.sum(difference**2)),5)
             self.done = False
 
         self.state = self.space.current_pos
@@ -130,7 +127,7 @@ class EmbeddingEnv(gym.Env):
         if self.number_of_remain_words == 0:
             self.done =True
 
-        return self.state, reward, self.done, info
+        return self.state.tolist(), reward, self.done, info
 
     def __move_robot(self, action):
         if isinstance(action, int) or isinstance(action, (np.ndarray, np.generic)):
@@ -140,7 +137,7 @@ class EmbeddingEnv(gym.Env):
 
     def reset(self):
         self.space.reset_robot()
-        self.state = np.array(self.get_current_goal)
+        self.state = np.array(self.get_current_goal).tolist()
         self.done = False
         return self.state
 
@@ -159,7 +156,7 @@ class EmbeddingEnv(gym.Env):
 
     @property
     def get_current_goal(self):
-        return self.goals_as_vectors[0]
+        return self.goals_as_vectors[0].tolist()
 
     @property
     def number_of_remain_words(self):

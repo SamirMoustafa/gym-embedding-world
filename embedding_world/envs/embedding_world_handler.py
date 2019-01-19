@@ -79,6 +79,8 @@ class SpaceHandler:
     def __configuration(self):
         # initialize temp. with zeros (no movement)
         temp_tuple = [0] * self.emb_dim
+        self.COMPASS['pick-up'] = tuple(temp_tuple)
+        # make move two move for every dimension
         for i in range(self.emb_dim):
             # define increasing motion in dimension(i)
             up, up[i] = temp_tuple, self.epsilon

@@ -166,4 +166,4 @@ class SpaceHandler:
 
 
 if __name__ == "__main__":
-    raise BaseException("Can't run the script Try to use Gym to run the environment")
+    raise BaseException("Can't run the script Try to use Gym to run embedding_world environment")

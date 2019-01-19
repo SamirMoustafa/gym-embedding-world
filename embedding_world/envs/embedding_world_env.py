@@ -26,7 +26,7 @@ class EmbeddingEnv(gym.Env):
 
         if embedding_from_file and embedding_to_file:
 
-            phrase, target = 'grab', 'جرب ديه'
+            phrase, target = 'boy', 'صبي'
 
             # load the corpus to gensim model as word to vector
             self.space = SpaceHandler(space_file_path_from=embedding_from_file,
@@ -119,7 +119,7 @@ class EmbeddingEnv(gym.Env):
             self.__move_robot(action)
 
         else:
-            reward = -0.1 * self.emb_dim * round(self.epsilon,6)
+            reward = -self.emb_dim * np.sqrt(np.sum(difference**2))
             self.done = False
 
         self.state = self.space.current_pos
@@ -170,3 +170,6 @@ class EmbeddingEnvExample(EmbeddingEnv):
         super(EmbeddingEnvExample, self).__init__(
             embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
             embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
+
+if __name__ == "__main__":
+    raise BaseException("Can't run the script Try to use Gym to run embedding_world environment")

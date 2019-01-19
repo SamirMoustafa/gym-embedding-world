@@ -23,9 +23,8 @@ class SpaceHandler:
 
     COMPASS = {}
 
-    def __init__(self, space_file_path_from=None,   space_file_path_to=None,
-                 initial_words_list=None,           goal_words_list=None,
-                 epslion=None):
+    def __init__(self,  space_file_path_from=None,  space_file_path_to=None,
+                        initial_words_list=None,    goal_words_list=None):
 
         # print message to make awareness that it might take some time
         print('Start loading the space from \'%s\', it might take several time.' %
@@ -34,7 +33,7 @@ class SpaceHandler:
         # initialize goal and task finish or not
         self.__goal = 0
         self.__task_is_over = False
-        self.epslion = epslion
+
 
         # Load space to map from it
         self.__space_initial = load_space(space_file_path_from)
@@ -42,11 +41,7 @@ class SpaceHandler:
         # Load space to map to it
         self.__space_target = load_space(space_file_path_to)
 
-        # Handle epsilon value
-        if epslion is not None and epslion < 1:
-            self.space_size = int(epslion ** (-1))
-        else:
-            raise ValueError("Epsilon can't be %s" % epslion)
+        self.epsilon = self.__compute_epsilon()
 
         # define the embedding dimension
         self.emb_dim = self.__space_initial.wv.vector_size
@@ -67,22 +62,25 @@ class SpaceHandler:
         self.__configuration()
 
         # print message to make awareness that loading word2vec model finished
-        print('Finish loading %s with epsilon equals %f' % (space_name, epslion))
+        print('Finish loading %s with epsilon equals %f' % (space_name, self.epsilon))
 
     def __handle_initial_goal(self, initial_words_list, goal_words_list):
         max_length = max(len(initial_words_list), len(goal_words_list))
         self.__set_initial(initial_words_list, max_length)
         self.__set_goals(goal_words_list, max_length)
 
+    def __compute_epsilon(self):
+        return 1/max(len(self.__space_initial.wv.vocab), len(self.__space_target.wv.vocab))
+
     def __configuration(self):
         # initialize temp. with zeros (no movement)
         temp_tuple = [0] * self.emb_dim
         for i in range(self.emb_dim):
             # define increasing motion in dimension(i)
-            up, up[i] = temp_tuple, self.epslion
+            up, up[i] = temp_tuple, self.epsilon
             self.COMPASS["dim(%s)+1" % i] = tuple(up)
             # define decreasing motion in dimension(i)
-            down, down[i] = temp_tuple, -1 * self.epslion
+            down, down[i] = temp_tuple, -1 * self.epsilon
             self.COMPASS["dim(%s)-1" % i] = tuple(down)
             # reinitialize temp. with zeros
             temp_tuple = [0] * self.emb_dim
@@ -136,6 +134,12 @@ class SpaceHandler:
     def reset_robot(self):
         return self.get_initial()
 
+    def set_robot(self,pos):
+        self.__robot = np.array([pos])
+
+    def get_epsilon(self):
+        return self.epsilon
+
     @property
     def space(self):
         return self.__space_initial
@@ -159,6 +163,7 @@ class SpaceHandler:
     @property
     def stop(self):
         return self.__task_is_over
+
 
 if __name__ == "__main__":
     raise BaseException("Can't run the script Try to use Gym to run the environment")

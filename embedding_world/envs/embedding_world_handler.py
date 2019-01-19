@@ -22,9 +22,13 @@ def load_space(space_file_path):
 class SpaceHandler:
 
     COMPASS = {}
+    is_real_world = False
 
     def __init__(self,  space_file_path_from=None,  space_file_path_to=None,
                         initial_words_list=None,    goal_words_list=None):
+
+        if goal_words_list is None:
+            self.is_real_world = True
 
         # print message to make awareness that it might take some time
         print('Start loading the space from \'%s\', it might take several time.' %

@@ -97,8 +97,9 @@ class SpaceHandler:
         except Exception:
             pass
 
-    def remove_first_vector(self):
+    def residual_vectors(self):
         # remove the first word from the matrix(robot) that's move
+        self.__robot[1] = self.__robot[1] + self.__robot[0]
         self.__robot.pop(0)
 
     def move_robot(self, dir):
@@ -146,6 +147,9 @@ class SpaceHandler:
     def get_epsilon(self):
         return self.epsilon
 
+    def get_word_from_vec(self, vec):
+        return self.__space_target.wv.most_similar(positive=[vec],topn=1)[0][0]
+
     @property
     def space(self):
         return self.__space_initial
@@ -165,10 +169,6 @@ class SpaceHandler:
     @property
     def goal(self):
         return self.__goal
-
-    @property
-    def stop(self):
-        return self.__task_is_over
 
 
 if __name__ == "__main__":

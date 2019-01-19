@@ -47,7 +47,7 @@ Usage
 
 Embedding world is simple N-dimension world for example the [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md).
 
-There are `2N` actions `{dimension(i)+1, dimension(i)-1}` ∀ i in range from 1 to N
+There are `2N + 1` actions `{dimension(i)+1, dimension(i)-1}` ∪ ` {pickup}` ∀ i in range from 1 to N
 
 
 which deterministically cause the corresponding state transitions

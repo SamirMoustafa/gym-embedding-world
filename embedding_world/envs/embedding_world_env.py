@@ -15,6 +15,7 @@ def normalize_arabic(text):
 class EmbeddingEnv(gym.Env):
 
     phrase, target = None, None
+    in_production_mood = False
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = [['pick-up']]
     done = False
@@ -91,8 +92,25 @@ class EmbeddingEnv(gym.Env):
         self.ale.loadROM(self.game_path)
         return [seed]
 
-    def step(self, action):
+    def __step_in_production__(self, action):
+        reward = 0
+        # default info for game
+        info = {"ale.lives": self.ale.lives()}
+        if action == 0:
+            reward = .5
+            info['trans'] = self.space.get_word_from_vec(self.space.current_pos)
+            try:
+                self.space.residual_vectors()
+            except IndexError:
+                reward, self.done = 1, True
+                self.space.stop()
+        else:
+            self.__move_robot(action)
 
+        state = self.space.current_pos
+        return state, reward, self.done, info
+
+    def __step_in_training__(self, action):
         past_pos = self.space.current_pos
         self.__move_robot(action)
 
@@ -104,7 +122,7 @@ class EmbeddingEnv(gym.Env):
 
         # define difference between current position and current goal position
         difference = np.abs(self.space.current_pos - self.get_current_goal)
-
+        #                                           pick up action taken
         if (difference <= self.epsilon).all() and sum(action) == 0:
             if self.number_of_remain_words == 1:
                 # the phrase end
@@ -113,21 +131,29 @@ class EmbeddingEnv(gym.Env):
                 self.__remove_first_vector_from_goal()
             else:
                 reward = .5
-                self.space.remove_first_vector()
+                self.space.residual_vectors()
                 self.__remove_first_vector_from_goal()
                 self.done = False
             return self.space.current_pos.tolist(), reward, self.done, info
 
         else:
-            reward = -round(self.emb_dim * np.sqrt(np.sum(difference**2)),5)
+            reward = -round(self.emb_dim * np.sqrt(np.sum(difference ** 2)), 5)
             self.done = False
 
         self.state = self.space.current_pos
 
         if self.number_of_remain_words == 0:
-            self.done =True
+            self.done = True
 
         return self.state.tolist(), reward, self.done, info
+
+
+
+    def step(self, action):
+        if self.in_production_mood is True:
+            return self.__step_in_production__(action)
+        else:
+            return self.__step_in_training__(action)
 
     def __move_robot(self, action):
         if isinstance(action, int) or isinstance(action, (np.ndarray, np.generic)):
@@ -146,6 +172,9 @@ class EmbeddingEnv(gym.Env):
 
     def close(self):
         del self.space
+
+    def production_is_on(self):
+        self.in_production_mood = True
 
     def __remove_first_vector_from_goal(self):
         self.goals_as_vectors.pop(0)

@@ -31,7 +31,7 @@ class EmbeddingEnv(gym.Env):
 
             self.epsilon = epsilon
 
-            phrase, target = 'grab', 'جرب'
+            phrase, target = 'grab', 'جرب ديه'
 
             # load the corpus to gensim model as word to vector
             self.space = SpaceHandler(space_file_path_from=embedding_from_file,
@@ -153,7 +153,7 @@ class EmbeddingEnv(gym.Env):
         # Normalize the goal matrix and check if it's equal to zeros or not
         if (np.array(self.goals_as_vectors).ravel() == 0).all():
             return 0
-        return len(self.goals_as_vectors) - 1
+        return len(self.goals_as_vectors)
 
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):

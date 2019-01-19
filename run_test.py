@@ -9,8 +9,14 @@ if __name__ == '__main__':
 
     env.reset()
 
-    state, reward, done, info = env.step(np.array([1],dtype='int64'))
-
-    print(state, reward, done, info)
+    print("===================================")
+    state, reward, done, info = env.step(np.array([0], dtype='int64'))
+    print(state, reward, done)
+    print("===================================")
+    state, reward, done, info = env.step(np.array([0], dtype='int64'))
+    print(state, reward, done)
+    print("===================================")
+    state, reward, done, info = env.step(np.array([0], dtype='int64'))
+    print(state, reward, done)
 
     env.close()

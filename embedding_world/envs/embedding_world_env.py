@@ -8,7 +8,14 @@ import atari_py
 from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 
+def normalize_arabic(text):
+    text = re.sub("[إأٱآا]", "ا", text)
+    return(text)
+
+
 class EmbeddingEnv(gym.Env):
+
+    DELTA = 1e-15
 
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = []
@@ -24,21 +31,20 @@ class EmbeddingEnv(gym.Env):
 
             self.epsilon = epsilon
 
-            phrase, target = 'accept', 'قبول'
+            phrase, target = 'grab', 'جرب'
 
             # load the corpus to gensim model as word to vector
             self.space = SpaceHandler(space_file_path_from=embedding_from_file,
                                       space_file_path_to=embedding_to_file,
                                       initial_words_list = phrase.lower().split(),
-                                      goal_words_list=self.normalizeArabic(target).split(),
+                                      goal_words_list=normalize_arabic(target).split(),
                                       epslion=epsilon)
 
             # get goal
-            self.goals_as_vetors = self.space.get_goals()
+            self.goals_as_vectors = self.space.get_goals()
 
             # get initial
             self.initial_as_vetors = self.space.get_initial()
-
 
             # get the embedding dimension
             self.emb_dim = self.space.emb_dim
@@ -72,11 +78,7 @@ class EmbeddingEnv(gym.Env):
             # Simulation related variables.
             self.seed()
             self.reset()
-            '''
-            # Just need to initialize the relevant attributes
-            self._configure()
-            
-            '''
+
         else:
             if epsilon is None:
                 raise AttributeError("Must supply epsilon as float")
@@ -85,44 +87,47 @@ class EmbeddingEnv(gym.Env):
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
-
         self.ale.loadROM(self.game_path)
-
         return [seed]
 
     def step(self, action):
-        if isinstance(action, int) or isinstance(action, (np.ndarray, np.generic) ) :
+        info = {"ale.lives": self.ale.lives()}
+
+        if isinstance(action, int) or isinstance(action, (np.ndarray, np.generic)):
             self.space.move_robot(self.ACTION[int(action)])
         else:
             self.space.move_robot(action)
 
-        # define difference between current position and target position
-        diff = np.abs(self.space.robot - self.goals_as_vetors[0])
-        # check if the vector of robot is near to the target(desired) vector
-        if (diff <= self.epsilon).all():
-            if len(self.goals_as_vetors) is 1:
+        # define difference between current position and current goal position
+        difference = np.abs(self.space.current_pos - self.get_current_goal) - self.DELTA
+
+        if (difference <= self.epsilon).all():
+            if self.number_of_remain_words == 0:
                 # the phrase end
                 reward = 1
                 self.done = True
+                return self.state, reward, self.done, info
             else:
-                # match one word
-                self.goals_as_vetors.pop(0)
                 reward = .5
                 self.done = False
+
+            self.space.remove_first_vector()
+            self.__remove_first_vector_from_goal()
+
         else:
             reward = -0.1 / self.space_size
             self.done = False
 
-        self.state = self.space.robot
+        self.state = self.space.current_pos
 
-        info = {"ale.lives": self.ale.lives()}
+        if self.number_of_remain_words == 0:
+            self.done =True
 
         return self.state, reward, self.done, info
 
     def reset(self):
         self.space.reset_robot()
-        self.state = np.array(self.initial_as_vetors)
-        self.steps_beyond_done = None
+        self.state = np.array(self.get_current_goal)
         self.done = False
         return self.state
 
@@ -132,13 +137,23 @@ class EmbeddingEnv(gym.Env):
     def close(self):
         del self.space
 
-    def normalizeArabic(self,text):
-        text = re.sub("[إأٱآا]", "ا", text)
-        return (text)
+    def __remove_first_vector_from_goal(self):
+        self.goals_as_vectors.pop(0)
 
     @property
     def env(self):
         return self
+
+    @property
+    def get_current_goal(self):
+        return self.goals_as_vectors[0]
+
+    @property
+    def number_of_remain_words(self):
+        # Normalize the goal matrix and check if it's equal to zeros or not
+        if (np.array(self.goals_as_vectors).ravel() == 0).all():
+            return 0
+        return len(self.goals_as_vectors) - 1
 
 class EmbeddingEnvExample(EmbeddingEnv):
     def __init__(self):

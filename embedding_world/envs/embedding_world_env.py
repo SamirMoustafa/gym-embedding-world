@@ -124,7 +124,6 @@ class EmbeddingEnv(gym.Env):
         difference = np.abs(self.space.current_pos - self.get_current_goal)
         #                                           pick up action taken
         try:
-            1/0
             if (difference <= self.epsilon).all() and sum(action) == 0:
                 if self.number_of_remain_words == 1:
                     # the phrase end

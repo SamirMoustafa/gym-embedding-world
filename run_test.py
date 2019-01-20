@@ -13,6 +13,7 @@ if __name__ == '__main__':
                         embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
     env.reset()
 
+    print(env.action_space.n)
     #env.production_is_on()
 
     print("===================================")

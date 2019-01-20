@@ -13,7 +13,7 @@ if __name__ == '__main__':
                         embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
     env.reset()
 
-    env.production_is_on()
+    #env.production_is_on()
 
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     state, reward, done, info = env.step(np.array([0], dtype='int64'))
     print(state, reward, done, info)
     print("===================================")
-    state, reward, done, info = env.step(np.array([5], dtype='int64'))
+    state, reward, done, info = env.step(np.array([4], dtype='int64'))
     print(state, reward, done, info)
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))

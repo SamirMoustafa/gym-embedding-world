@@ -123,22 +123,26 @@ class EmbeddingEnv(gym.Env):
         # define difference between current position and current goal position
         difference = np.abs(self.space.current_pos - self.get_current_goal)
         #                                           pick up action taken
-        if (difference <= self.epsilon).all() and sum(action) == 0:
-            if self.number_of_remain_words == 1:
-                # the phrase end
-                reward = 1
-                self.done = True
-                self.__remove_first_vector_from_goal()
-            else:
-                reward = .5
-                self.space.residual_vectors()
-                self.__remove_first_vector_from_goal()
-                self.done = False
-            return self.space.current_pos.tolist(), reward, self.done, info
+        try:
+            if (difference <= self.epsilon).all() and sum(action) == 0:
+                if self.number_of_remain_words == 1:
+                    # the phrase end
+                    reward = 1
+                    self.done = True
+                    self.__remove_first_vector_from_goal()
+                else:
+                    reward = .5
+                    self.space.residual_vectors()
+                    self.__remove_first_vector_from_goal()
+                    self.done = False
+                return self.space.current_pos.tolist(), reward, self.done, info
 
-        else:
-            reward = -round(self.emb_dim * np.sqrt(np.sum(difference ** 2)), 5)
-            self.done = False
+            else:
+                reward = -round(self.emb_dim * np.sqrt(np.sum(difference ** 2)), 5)
+                self.done = False
+        except Exception():
+            print(action)
+            raise Exception("unknown action")
 
         self.state = self.space.current_pos
 
@@ -146,8 +150,6 @@ class EmbeddingEnv(gym.Env):
             self.done = True
 
         return self.state.tolist(), reward, self.done, info
-
-
 
     def step(self, action):
         if self.in_production_mood is True:

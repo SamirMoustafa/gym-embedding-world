@@ -16,6 +16,7 @@ class EmbeddingEnv(gym.Env):
 
     phrase, target = None, None
     in_production_mood = False
+    initial_for_reset = None
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = [['pick-up']]
     done = False
@@ -80,6 +81,7 @@ class EmbeddingEnv(gym.Env):
         self.observation_space = spaces.Box(np.array(low_i), np.array(high_i), dtype='float64')
 
         # initial condition
+        self.initial_for_reset = self.space.initial_matrix[0]
         self.state = None
         self.steps_beyond_done = None
 
@@ -134,7 +136,7 @@ class EmbeddingEnv(gym.Env):
                 self.space.residual_vectors()
                 self.__remove_first_vector_from_goal()
                 self.done = False
-            return self.space.current_pos.tolist(), reward, self.done, info
+            return self.space.current_pos, reward, self.done, info
 
         else:
             reward = -round(self.emb_dim * np.sqrt(np.sum(difference ** 2)), 5)
@@ -145,7 +147,7 @@ class EmbeddingEnv(gym.Env):
         if self.number_of_remain_words == 0:
             self.done = True
 
-        return self.state.tolist(), reward, self.done, info
+        return self.state, reward, self.done, info
 
 
 
@@ -162,10 +164,9 @@ class EmbeddingEnv(gym.Env):
             self.space.move_robot(action)
 
     def reset(self):
-        self.space.reset_robot()
-        self.state = self.space.get_goals()[0].tolist()
+        self.state = self.initial_for_reset
+        print(self.state)
         self.done = False
-
         return self.state
 
     def render(self, mode='human', close=False):
@@ -186,7 +187,7 @@ class EmbeddingEnv(gym.Env):
 
     @property
     def get_current_goal(self):
-        return self.goals_as_vectors[0].tolist()
+        return self.goals_as_vectors[0]
 
     @property
     def number_of_remain_words(self):

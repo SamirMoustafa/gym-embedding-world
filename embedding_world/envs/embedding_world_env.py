@@ -165,7 +165,6 @@ class EmbeddingEnv(gym.Env):
 
     def reset(self):
         self.state = self.initial_for_reset
-        print(self.state)
         self.done = False
         return self.state
 

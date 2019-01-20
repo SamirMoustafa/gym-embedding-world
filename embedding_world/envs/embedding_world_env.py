@@ -165,6 +165,7 @@ class EmbeddingEnv(gym.Env):
         self.space.reset_robot()
         self.state = self.space.get_goals()[0].tolist()
         self.done = False
+
         return self.state
 
     def render(self, mode='human', close=False):

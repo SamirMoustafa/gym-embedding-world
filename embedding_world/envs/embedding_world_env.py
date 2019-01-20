@@ -163,7 +163,7 @@ class EmbeddingEnv(gym.Env):
 
     def reset(self):
         self.space.reset_robot()
-        self.state = np.array(self.get_current_goal).tolist()
+        self.state = self.space.get_goals()[0].tolist()
         self.done = False
         return self.state
 

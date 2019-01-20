@@ -12,6 +12,7 @@ if __name__ == '__main__':
     env.__set_paths__(embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
                         embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
     env.reset()
+    env.reset()
 
     print(env.action_space.n)
     #env.production_is_on()
@@ -61,5 +62,6 @@ if __name__ == '__main__':
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))
     print(state, reward, done, info)
+    env.reset()
 
     env.close()

@@ -1,8 +1,8 @@
 language: python
 python:
-  - "3.5-dev"  # 3.6 development branch
-  - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.6 development branch
+  - "3.5"
+  - "3.6"
+  - "3.7"
 
 env:
   - UBUNTU_VER=16.04
@@ -17,8 +17,3 @@ install:
 
 script:
   - python run_test.py
-
-deploy:
-  provider: pypi
-  user: "SamirMoustafa"
-  password: "SaMiR123456"

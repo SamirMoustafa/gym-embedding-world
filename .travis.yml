@@ -17,3 +17,8 @@ install:
 
 script:
   - python run_test.py
+
+deploy:
+  provider: pypi
+  user: "SamirMoustafa"
+  password: "SaMiR123456"

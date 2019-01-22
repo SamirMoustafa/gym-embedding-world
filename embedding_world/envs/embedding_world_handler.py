@@ -75,7 +75,6 @@ class SpaceHandler:
         if dir not in self.COMPASS.keys():
             raise ValueError("dir cannot be %s. The only valid dirs are %s." % (str(dir), str(self.COMPASS.keys())))
         if self.__is_in_region__(dir, self.__robot[0]):
-            print(self.__is_in_region__(dir, self.__robot[0]))
             # move the robot
             self.__robot[0] = self.__robot[0] + np.array(self.COMPASS[dir], dtype='float64')
         return self.__robot[0]
@@ -99,7 +98,6 @@ class SpaceHandler:
         # define the future step that the robot wants to move to it
         future_step = pos + self.COMPASS[dir]
         # check that future step in between 1 and -1
-        print(future_step)
         if (1 < future_step).any() or (future_step < -1).any():
             self.is_robot_in_region = False
             return False

@@ -40,16 +40,16 @@ Usage
         $ python >>> import embedding_world
         $ python >>> env = gym.make('embedding_world-v0')
         $ python >>> env.set_paths(embedding_from_file="... YOUR EMBEDDING PATH TO MAP FROM IT  ...",
-                                   embedding_to_file="... YOUR EMBEDDING PATH TO MAP TO IT  ...")
+                                   embedding_to_file  ="... YOUR EMBEDDING PATH TO MAP TO IT  .....")
         $ python >>> env.production_is_off()
         $ python >>> env.set_sentences('... YOUR SENTENCE TO TRANSLATE FROM IT ...', 
-                                       '... YOUR SENTENCE TO TRANSLATE TO IT ...')
+                                       '... YOUR SENTENCE TO TRANSLATE TO IT .....')
         $ python >>> state, reward, done, info = env.step('dim(0)+1')
 
 ``embedding_world-v0``
 ----------------------
 
-Embedding world is a simple environment based on OpenAI gym, that's load two-word embedding e.g. [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md)  with N-dimension and move from one embedding to the other one using an agent action such that actions that could be taken are `2N + 1` actions `{dimension(i)+1, dimension(i)-1}` ∪ ` {pickup}` ∀ `i` in range from 1 to N
+Embedding world is a simple environment based on OpenAI gym, that's load two-word embedding e.g. [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md)  with N-dimension and move from one word(s) embedding-location to the other embedding using an agent action such that actions that could be taken are `2N + 1` actions `{dimension(i)+1, dimension(i)-1}` ∪ ` {pickup}` ∀ `i` in range from 1 to N
 
 which deterministically cause the corresponding state transitions
 but actions that would take an agent of the grid leave a state unchanged.

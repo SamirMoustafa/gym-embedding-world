@@ -1,4 +1,3 @@
-import re
 import gym
 import atari_py
 import numpy as np
@@ -7,17 +6,10 @@ from gym.utils import seeding
 from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 
-def normalize_arabic(text):
-    text = re.sub("[إأٱآا]", "ا", text)
-    return (text)
-
-def normalize_english(text):
-    return text.lower()
-
-
 class EmbeddingEnv(gym.Env):
 
     def __init__(self, embedding_from_file=None, embedding_to_file=None):
+
         # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
@@ -36,6 +28,10 @@ class EmbeddingEnv(gym.Env):
         else:
             pass
 
+    def set_normalization(self, from_normalize, to_normalize):
+        self.from_normalize = from_normalize
+        self.to_normalize = to_normalize
+
     def set_paths(self, embedding_from_file, embedding_to_file):
         # load the corpus to gensim model as word to vector
         self.space = SpaceHandler(space_file_path_from=embedding_from_file,
@@ -51,6 +47,7 @@ class EmbeddingEnv(gym.Env):
         [self.ACTION.append(["dim(%s)+1" % dim, "dim(%s)-1" % dim]) for dim in range(self.emb_dim)]
         # flatten 2D list of action to 1D list : len len(ACTION) = 2N + 1
         self.ACTION = [j for sub in self.ACTION for j in sub]
+
         # store epsilon inverse as a space size
         self.space_size = int(self.epsilon ** (-1))
 
@@ -74,7 +71,7 @@ class EmbeddingEnv(gym.Env):
             raise ValueError("use set_paths(embedding_from_file, embedding_to_file) to set your corpses paths.")
 
         self.phrase, self.target = phrase, target
-        self.space.handle_initial_and_goal(normalize_english(self.phrase).split(), normalize_arabic(self.target).split())
+        self.space.handle_initial_and_goal(self.from_normalize(self.phrase).split(), self.to_normalize(self.target).split())
 
         # initial condition
         self.initial_for_reset = self.space.initial_matrix[0]
@@ -100,6 +97,17 @@ class EmbeddingEnv(gym.Env):
         return [seed]
 
     def step(self, action):
+        """Accepts an action and returns a tuple (observation, reward, done, info).
+
+        Args:
+            action (object): an action provided by the environment
+
+        Returns:
+            observation (object): agent's observation of the current environment
+            reward (float) : amount of reward returned after previous action
+            done (boolean): whether the episode has ended, in which case further step() calls will return undefined results
+            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+        """
         if self.in_production_mood:
             return self.__step_in_production__(action)
         else:
@@ -109,11 +117,17 @@ class EmbeddingEnv(gym.Env):
             return self.__step_in_training__(action)
 
     def reset(self):
+        """Resets the state of the environment and returns an initial observation.
+
+                Returns: observation (object): the initial observation of the
+                    space.
+        """
         self.state = self.initial_for_reset
         self.done = False
         return self.state
 
     def render(self, mode='human', close=False):
+        # TODO : Make PCA on the N-dimension embedding and show them in a grid world
         pass
 
     def close(self):

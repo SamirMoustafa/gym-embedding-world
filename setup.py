@@ -1,13 +1,16 @@
 # https://travis-ci.org/SamirMoustafa/embedding_world
 from setuptools import setup, find_packages
 
-with open('README.md') as readme_file:
-      readme = readme_file.read()
+# read the contents of your README file
+from os import path
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(name='gym-embedding_world',
-      version='0.0.2',
+      version='0.0.3.2',
       description='Two word embedding mapping compatible with OpenAI gym.',
-      long_description=readme,
+      long_description=long_description,
       license="MIT",
       install_requires=['gym', 'numpy', 'gensim', 'atari-py'],
       keywords='embedding_world',
@@ -15,7 +18,7 @@ setup(name='gym-embedding_world',
       include_package_data=True,
       author='Samir Moustafa',
       packages=find_packages(),
-      python_requires='>=3.5,<3.8',
+      python_requires='>=3.5,<3.7',
       url='https://github.com/SamirMoustafa/gym-embedding-world/',
       package_data={'gym-embedding_world': ['embedding_world/envs/world_sample//*.vec']},
       scripts = [ 'embedding_world/__init__.py',
@@ -28,6 +31,5 @@ setup(name='gym-embedding_world',
             "Programming Language :: Python :: 3.4",
             "Programming Language :: Python :: 3.5",
             "Programming Language :: Python :: 3.6",
-            "Programming Language :: Python :: 3.7",
       ]
       )

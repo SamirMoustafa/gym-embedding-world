@@ -167,7 +167,8 @@ class EmbeddingEnv(gym.Env):
 
         # Check that there is remaining words
         if self.__number_of_remain_words__() == 0:
-            return past_pos, 0, True, info
+            self.done = True
+            return past_pos, 0, self.done, info
 
         # Check that the goal accomplished one time only
         if self.done:
@@ -183,13 +184,7 @@ class EmbeddingEnv(gym.Env):
         # Check the distance between robot and check pick up action is taken
         if (difference <= self.epsilon).all() and (action == [0] or action == 0):
             # Robot capture something right
-            if self.__number_of_remain_words__() >= 1:
-                # The phrase end at right position
-                reward = 1
-                self.done = True
-                self.__remove_first_vector_from_goal__()
-                return current_pos, reward, self.done, info
-            else:
+            if self.__number_of_remain_words__() > 1:
                 # The robot pick-up a word correctly
                 self.space.__residual_vectors__()
                 self.__remove_first_vector_from_goal__()
@@ -197,6 +192,13 @@ class EmbeddingEnv(gym.Env):
                 self.done = False
                 # Give a positive reward and stay in current location
                 return current_pos, reward, self.done, info
+            else:
+                # The phrase end at right position
+                reward = 1
+                self.done = True
+                self.__remove_first_vector_from_goal__()
+                return current_pos, reward, self.done, info
+
         else:
             # Give a negative reward
             reward = -round(np.sqrt(np.sum(difference ** 2)), 5)
@@ -213,7 +215,11 @@ class EmbeddingEnv(gym.Env):
         self.goals_as_vectors.pop(0)
 
     def __number_of_remain_words__(self):
-        return np.count_nonzero(self.goals_as_vectors)
+        count = 0
+        for i in self.goals_as_vectors:
+            if sum(i) != 0:
+                count += 1
+        return count
 
     @property
     def env(self):

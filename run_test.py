@@ -10,7 +10,7 @@ if __name__ == '__main__':
     env.set_paths(embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
                   embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
 
-    env.set_sentences('grab dia', '')
+    env.set_sentences('test1 test2', 'تجربه1 تجربه2')
 
     env.reset()
     env.reset()

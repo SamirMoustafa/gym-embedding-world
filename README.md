@@ -49,14 +49,14 @@ Usage
 ``embedding_world-v0``
 ----------------------
 
-Embedding world is a simple environment based on OpenAI gym, that's load two-word embedding e.g. [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md)  with N-dimension and move from one word(s) embedding-location to the other embedding using an agent action such that actions that could be taken are `2N + 1` actions `{dimension(i)+1, dimension(i)-1}` ∪ ` {pickup}` ∀ `i` in range from 1 to N
+Embedding world is a simple environment based on OpenAI gym, that loads two-word embedding e.g. [Stanfrod GloVe](https://nlp.stanford.edu/projects/glove/) or [facebook fastText models](https://github.com/facebookresearch/fastText/blob/master/pretrained-vectors.md)  with N-dimension and moves from one word(s) embedding-location to the other embedding using an agent actions such that actions that could be taken are `2N + 1` actions `{dimension(i)+1, dimension(i)-1}` ∪ ` {pickup}` ∀ `i` in range from 1 to N
 
 which deterministically cause the corresponding state transitions
 but actions that would take an agent of the grid leave a state unchanged.
 The reward is negative for all transition until the goal is reached.
-The terminal state(goal) is represent in a vector/s.
+The terminal state(goal) is represented in a vector/s.
 
-This environment has been built as part of a graduation project at the [University of Alexandria, Department of Computer Science](http://sci.alexu.edu.eg/index.php/en/)
+This environment has been built as part of a graduation project at [University of Alexandria, Department of Computer Science](http://sci.alexu.edu.eg/index.php/en/)
 
 Please use this bibtex if you want to cite this repository in your publications:
 

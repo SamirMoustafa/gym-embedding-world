@@ -1,21 +1,22 @@
-import gym
 import atari_py
+import gym
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
+
 from embedding_world.envs.embedding_world_handler import SpaceHandler
 
 
 class EmbeddingEnv(gym.Env):
+    def __init__(self):
 
-    def __init__(self, embedding_from_file=None, embedding_to_file=None):
+        self.metadata = {'render.modes': ['human', "rgb_array"]}
 
         # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
 
         # initializing
-        self.metadata = {'render.modes': ['human', "rgb_array"]}
         self.number_of_words_to_trans = 0
         self.ACTION = [['pick-up']]
         self.phrase, self.target = None, None
@@ -23,16 +24,12 @@ class EmbeddingEnv(gym.Env):
         self.initial_for_reset = None
         self.done = False
 
-        if embedding_from_file and embedding_to_file:
-            self.set_paths(embedding_to_file, embedding_from_file)
-        else:
-            pass
-
     def set_normalization(self, from_normalize, to_normalize):
         self.from_normalize = from_normalize
         self.to_normalize = to_normalize
 
     def set_paths(self, embedding_from_file, embedding_to_file):
+
         # load the corpus to gensim model as word to vector
         self.space = SpaceHandler(space_file_path_from=embedding_from_file,
                                   space_file_path_to=embedding_to_file)
@@ -71,7 +68,8 @@ class EmbeddingEnv(gym.Env):
             raise ValueError("use set_paths(embedding_from_file, embedding_to_file) to set your corpses paths.")
 
         self.phrase, self.target = phrase, target
-        self.space.handle_initial_and_goal(self.from_normalize(self.phrase).split(), self.to_normalize(self.target).split())
+        self.space.handle_initial_and_goal(self.from_normalize(self.phrase).split(),
+                                           self.to_normalize(self.target).split())
 
         # initial condition
         self.initial_for_reset = self.space.initial_matrix[0]

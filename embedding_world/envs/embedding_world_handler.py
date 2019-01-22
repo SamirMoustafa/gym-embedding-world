@@ -11,7 +11,7 @@ def load_space(space_file_path):
     else:
         if not os.path.exists(space_file_path):
             dir_path = os.path.dirname(os.path.abspath(__file__))
-            rel_path = os.path.join("%sworld_samples%s"%(dir_path, space_file_path))
+            rel_path = os.path.join("%sworld_samples%s" % (dir_path, space_file_path))
             if os.path.exists(rel_path):
                 space_file_path_to = rel_path
             else:
@@ -20,8 +20,7 @@ def load_space(space_file_path):
 
 
 class SpaceHandler:
-
-    def __init__(self, space_file_path_from=None,  space_file_path_to=None):
+    def __init__(self, space_file_path_from=None, space_file_path_to=None):
 
         # initialize goal and task finish or not
         self.initial_matrix = []
@@ -85,14 +84,14 @@ class SpaceHandler:
             if i < len(goal_words_list):
                 self.goal_matrix.append(self.__space_target.wv[goal_words_list[i]])
             else:
-                self.goal_matrix.append(np.zeros(self.emb_dim,  dtype='float64'))
+                self.goal_matrix.append(np.zeros(self.emb_dim, dtype='float64'))
 
     def set_initial(self, initial_words_list, desired_length):
         for i in range(desired_length):
             if i < len(initial_words_list):
                 self.initial_matrix.append(self.__space_initial.wv[initial_words_list[i]])
             else:
-                self.initial_matrix.append(np.zeros(self.emb_dim,  dtype='float64'))
+                self.initial_matrix.append(np.zeros(self.emb_dim, dtype='float64'))
 
     def __is_in_region__(self, dir, pos):
         # define the future step that the robot wants to move to it
@@ -112,7 +111,7 @@ class SpaceHandler:
         self.__robot.pop(0)
 
     def __compute_epsilon__(self):
-        return round(1/max(len(self.__space_initial.wv.vocab), len(self.__space_target.wv.vocab)), 5)
+        return round(1 / max(len(self.__space_initial.wv.vocab), len(self.__space_target.wv.vocab)), 5)
 
     def __configuration__(self):
         # initialize temp. with zeros (no movement)
@@ -138,14 +137,14 @@ class SpaceHandler:
     def reset_robot(self):
         return self.get_initial()
 
-    def set_robot(self,pos):
+    def set_robot(self, pos):
         self.__robot = np.array([pos])
 
     def get_epsilon(self):
         return self.epsilon
 
     def get_word_from_vec(self, vec):
-        return self.__space_target.wv.most_similar(positive=[vec],topn=1)[0][0]
+        return self.__space_target.wv.most_similar(positive=[vec], topn=1)[0][0]
 
     @property
     def space(self):

@@ -5,7 +5,7 @@ with open('README.md') as readme_file:
       readme = readme_file.read()
 
 setup(name='gym-embedding_world',
-      version='0.0.1',
+      version='0.0.2',
       description='Two word embedding mapping compatible with OpenAI gym.',
       long_description=readme,
       license="MIT",

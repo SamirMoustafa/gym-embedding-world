@@ -18,7 +18,6 @@ def normalize_english(text):
 class EmbeddingEnv(gym.Env):
 
     def __init__(self, embedding_from_file=None, embedding_to_file=None):
-
         # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
@@ -125,6 +124,9 @@ class EmbeddingEnv(gym.Env):
 
     def production_is_off(self):
         self.in_production_mood = False
+
+    def get_initial_state(self):
+        return self.space.current_pos
 
     def __step_in_production__(self, action):
         # default values for production

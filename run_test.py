@@ -13,9 +13,7 @@ if __name__ == '__main__':
     env.set_sentences('test1 test2', 'تجربه1 تجربه2')
 
     env.reset()
-    env.reset()
-
-    #env.production_is_on()
+    env.production_is_on()
 
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))

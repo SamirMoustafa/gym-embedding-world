@@ -15,7 +15,7 @@ if __name__ == '__main__':
     env.reset()
     env.reset()
 
-    env.production_is_on()
+    #env.production_is_on()
 
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))

@@ -16,19 +16,21 @@ def normalize_english(text):
 
 
 class EmbeddingEnv(gym.Env):
-    phrase, target = None, None
-    in_production_mood = False
-    initial_for_reset = None
-    metadata = {'render.modes': ['human', "rgb_array"]}
-    ACTION = [['pick-up']]
-    done = False
-    number_of_words_to_trans = 0
 
     def __init__(self, embedding_from_file=None, embedding_to_file=None):
 
         # simulate environment to be like a game(pong)
         self.ale = atari_py.ALEInterface()
         self.game_path = atari_py.get_game_path('pong')
+
+        # initializing
+        self.metadata = {'render.modes': ['human', "rgb_array"]}
+        self.number_of_words_to_trans = 0
+        self.ACTION = [['pick-up']]
+        self.phrase, self.target = None, None
+        self.in_production_mood = False
+        self.initial_for_reset = None
+        self.done = False
 
         if embedding_from_file and embedding_to_file:
             self.set_paths(embedding_to_file, embedding_from_file)

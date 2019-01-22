@@ -22,6 +22,7 @@ class EmbeddingEnv(gym.Env):
     metadata = {'render.modes': ['human', "rgb_array"]}
     ACTION = [['pick-up']]
     done = False
+    number_of_words_to_trans = 0
 
     def __init__(self, embedding_from_file=None, embedding_to_file=None):
 
@@ -34,7 +35,7 @@ class EmbeddingEnv(gym.Env):
         else:
             pass
 
-    def set_paths(self, embedding_from_file=None, embedding_to_file=None):
+    def set_paths(self, embedding_from_file, embedding_to_file):
         # load the corpus to gensim model as word to vector
         self.space = SpaceHandler(space_file_path_from=embedding_from_file,
                                   space_file_path_to=embedding_to_file)
@@ -85,6 +86,9 @@ class EmbeddingEnv(gym.Env):
         # get initial
         self.initial_as_vetors = self.space.get_initial()
 
+        # Put the number of words that will translated
+        self.number_of_words_to_trans = len(self.phrase.split())
+
         # Simulation related variables.
         self.seed()
         self.reset()
@@ -124,18 +128,27 @@ class EmbeddingEnv(gym.Env):
         # default values for production
         info = {"ale.lives": self.ale.lives()}
         reward = 0
-        if action == 0:
-            info['trans'] = self.space.get_word_from_vec(self.space.current_pos)
-            current_pos = self.space.current_pos
-            reward, self.done = 1, True
-            if not self.__number_of_remain_words__() >= 1:
-                self.space.__residual_vectors__()
-                self.space.stop()
-        else:
-            current_pos = self.__move_robot__(action)
 
-        state = current_pos
-        return state, reward, self.done, info
+        if self.done:
+            return self.space.current_pos, 0, self.done, info
+
+        if action == 0:
+            self.number_of_words_to_trans -= 1
+            info['trans'] = self.space.get_word_from_vec(self.space.current_pos)
+
+            if self.number_of_words_to_trans > 0:
+                self.space.__residual_vectors__()
+                self.done = False
+                reward = .5
+            else:
+                self.done = True
+                reward = 1
+
+            return self.space.current_pos, reward, self.done, info
+
+        else:
+            state = self.__move_robot__(action)
+            return state, reward, self.done, info
 
     def __step_in_training__(self, action):
 
@@ -170,7 +183,7 @@ class EmbeddingEnv(gym.Env):
         # Check the distance between robot and check pick up action is taken
         if (difference <= self.epsilon).all() and (action == [0] or action == 0):
             # Robot capture something right
-            if self.__number_of_remain_words__() <= 2:
+            if self.__number_of_remain_words__() >= 1:
                 # The phrase end at right position
                 reward = 1
                 self.done = True

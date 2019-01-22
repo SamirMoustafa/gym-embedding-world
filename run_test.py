@@ -7,14 +7,14 @@ if __name__ == '__main__':
 
     env = gym.make('embedding_world-v0')
 
-    env.__set_sentences__('grab', 'جرب ديه')
+    env.set_paths(embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
+                  embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
 
-    env.__set_paths__(embedding_from_file="embedding_world/envs/world_sample/mini.wiki.multi.2.en.vec",
-                        embedding_to_file="embedding_world/envs/world_sample/mini.wiki.multi.2.ar.vec")
+    env.set_sentences('grab dia', 'جرب ديه')
+
     env.reset()
     env.reset()
 
-    print(env.action_space.n)
     #env.production_is_on()
 
     print("===================================")
@@ -24,28 +24,7 @@ if __name__ == '__main__':
     state, reward, done, info = env.step(np.array([1], dtype='int64'))
     print(state, reward, done, info)
     print("===================================")
-    state, reward, done, info = env.step(np.array([1], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([1], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
     state, reward, done, info = env.step(np.array([0], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([3], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([3], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([3], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([1], dtype='int64'))
-    print(state, reward, done, info)
-    print("===================================")
-    state, reward, done, info = env.step(np.array([1], dtype='int64'))
     print(state, reward, done, info)
     print("===================================")
     state, reward, done, info = env.step(np.array([1], dtype='int64'))

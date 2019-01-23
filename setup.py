@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 # read the contents of your README file
 with open('README.md') as f:
-      long_description = f.read()
+    long_description = f.read()
 
 setup(name='gym-embedding_world',
       version='0.0.3.4',
@@ -20,15 +20,14 @@ setup(name='gym-embedding_world',
       python_requires='>=3.5,<3.7',
       url='https://github.com/SamirMoustafa/gym-embedding-world/',
       package_data={'gym-embedding_world': ['embedding_world/envs/world_sample//*.vec']},
-      scripts = [ 'embedding_world/__init__.py',
-                  'embedding_world/envs/__init__.py',
-                  'embedding_world/envs/embedding_world_env.py',
-                  'embedding_world/envs/embedding_world_handler.py'],
+      scripts=['embedding_world/__init__.py',
+               'embedding_world/envs/__init__.py',
+               'embedding_world/envs/embedding_world_env.py',
+               'embedding_world/envs/embedding_world_handler.py'],
       classifiers=[
-            "Operating System :: OS Independent",
-            "Programming Language :: Python :: 3 ",
-            "Programming Language :: Python :: 3.4",
-            "Programming Language :: Python :: 3.5",
-            "Programming Language :: Python :: 3.6",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 3 ",
+          "Programming Language :: Python :: 3.5",
+          "Programming Language :: Python :: 3.6",
       ]
       )

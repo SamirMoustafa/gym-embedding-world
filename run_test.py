@@ -2,6 +2,7 @@ import re
 
 import gym
 import numpy as np
+import embedding_world
 
 normalize_arabic = lambda text: re.sub("[إأٱآا]", "ا", text)
 

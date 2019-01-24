@@ -32,19 +32,19 @@ Install environment on colab
     !mv gym-embedding-world gym-embedding-world-org
     !cp -r gym-embedding-world-org/embedding_world /content
     !ls embedding_world
-
+    
 Usage
 -----
 
-        $ python >>> import gym
-        $ python >>> import embedding_world
-        $ python >>> env = gym.make('embedding_world-v0')
-        $ python >>> env.set_paths(embedding_from_file="... YOUR EMBEDDING PATH TO MAP FROM IT  ...",
-                                   embedding_to_file  ="... YOUR EMBEDDING PATH TO MAP TO IT  .....")
-        $ python >>> env.production_is_off()
-        $ python >>> env.set_sentences('... YOUR SENTENCE TO TRANSLATE FROM IT ...', 
-                                       '... YOUR SENTENCE TO TRANSLATE TO IT .....')
-        $ python >>> state, reward, done, info = env.step('dim(0)+1')
+    $ python >>> import gym
+    $ python >>> import embedding_world
+    $ python >>> env = gym.make('embedding_world-v0')
+    $ python >>> env.set_paths(embedding_from_file="... YOUR EMBEDDING PATH TO MAP FROM IT  ...",
+                               embedding_to_file  ="... YOUR EMBEDDING PATH TO MAP TO IT  .....")
+    $ python >>> env.production_is_off()
+    $ python >>> env.set_sentences('... YOUR SENTENCE TO TRANSLATE FROM IT ...', 
+                                   '... YOUR SENTENCE TO TRANSLATE TO IT .....')
+    $ python >>> state, reward, done, info = env.step('dim(0)+1')
 
 ``embedding_world-v0``
 ----------------------

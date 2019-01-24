@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     env.set_normalization(normalize_arabic, normalize_english)
 
-    env.set_sentences('test1 test2', 'تجربه1 تجربه2')
+    env.set_sentences('Test1 Test2', 'تجربه1 تجربه2')
 
     env.reset()
 

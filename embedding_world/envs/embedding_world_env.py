@@ -24,9 +24,13 @@ class EmbeddingEnv(gym.Env):
         self.initial_for_reset = None
         self.done = False
 
-    def set_normalization(self, from_normalize, to_normalize):
-        self.from_normalize = from_normalize
+    def set_normalization(self, to_normalize, from_normalize):
+        # Check that handler is loaded
+        if self.space is None:
+            raise ValueError("use set_paths(embedding_from_file, embedding_to_file) to set your corpses paths, "
+                             "before calling set_normalization().")
         self.to_normalize = to_normalize
+        self.from_normalize = from_normalize
 
     def set_paths(self, embedding_from_file, embedding_to_file):
 
@@ -60,12 +64,18 @@ class EmbeddingEnv(gym.Env):
             low_i.append(np.zeros(len(self.n_dim_space), dtype='float64'))
             high_i.append(np.array(self.n_dim_space, dtype='float64') - np.ones(len(self.n_dim_space), dtype='float64'))
 
-        self.observation_space = spaces.Box(np.array(low_i), np.array(high_i), dtype='float64')
+        self.observation_space = spaces.Box(-1, 1, shape=(1,len(self.n_dim_space)), dtype='float64')
 
     def set_sentences(self, phrase, target):
+
+        # Check that normalize is set
+        if self.to_normalize is None or self.to_normalize is None:
+            raise ValueError("use set_normalization(to_normalize, from_normalize) before calling set_sentences.")
+
         # Check that handler is loaded
         if self.space is None:
-            raise ValueError("use set_paths(embedding_from_file, embedding_to_file) to set your corpses paths.")
+            raise ValueError("use set_paths(embedding_from_file, embedding_to_file) to set your corpses paths, "
+                             "before calling set_sentences.")
 
         self.phrase, self.target = phrase, target
         self.space.handle_initial_and_goal(self.from_normalize(self.phrase).split(),

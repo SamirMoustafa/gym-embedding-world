@@ -9,7 +9,7 @@ OpenAI gym Embedding world
 
 [![Build Status](https://travis-ci.org/SamirMoustafa/gym-embedding-world.svg?branch=master)](https://travis-ci.org/SamirMoustafa/gym-embedding-world)
 
-Two word embedding mapping compatible with [OpenAI gym](https://github.com/openai/gym>).
+Two word embedding mapping compatible with [OpenAI gym](https://github.com/openai/gym/).
 
 Requirements:
 - Python 3.5+
